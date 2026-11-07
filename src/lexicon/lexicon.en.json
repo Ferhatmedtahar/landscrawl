@@ -847,8 +847,7 @@
    "set": {
     "terrain+": [
      "tundra"
-    ],
-    "surface.snowCover": 0.4
+    ]
    },
    "tint": "groundTint"
   },
@@ -865,8 +864,7 @@
    "set": {
     "terrain+": [
      "glacier"
-    ],
-    "surface.snowCover": 0.5
+    ]
    },
    "tint": "groundTint"
   },
@@ -2278,7 +2276,6 @@
     "white out"
    ],
    "set": {
-    "surface.snowCover": 0.85,
     "terrain+": [
      "tundra"
     ]

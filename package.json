@@ -9,11 +9,14 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "docs:images": "vite-node scripts/make-docs.ts"
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
     "typescript": "^7.0.2",
     "vite": "^8.3.6",
+    "vite-node": "^6.0.0",
     "vite-plugin-singlefile": "^2.3.4",
     "vitest": "^5.1.0"
   }

@@ -69,7 +69,7 @@ export function resolveScene(state: SceneState, seed: number): Resolved {
   if (!said('celestial.moon')) moon = time === 'night' ? pick<MoonPhase>(['crescent', 'half', 'full', 'full'], rMoon) : 'none'
   if (overcast) moon = 'none'
 
-  const snowCover = Math.max(state.surface.snowCover, backdrop === 'glacier' ? 0.5 : 0, has('tundra') ? 0.3 : 0)
+  const snowCover = Math.max(state.surface.snowCover, backdrop === 'glacier' ? 0.6 : 0, has('tundra') ? 0.3 : 0)
   const surface: Surface = snowCover >= 0.55 ? 'snow' : has('dunes') ? 'sand' : has('swamp') ? 'marsh' : has('mesa') || has('canyon') ? 'rock' : 'grass'
   const grass = said('vegetation.grass') ? state.vegetation.grass : surface === 'grass' ? 0.45 : 0.05
 

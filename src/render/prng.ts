@@ -1,4 +1,4 @@
-/** mulberry32: tiny seeded PRNG. Returns floats in [0, 1). Never use Math.random() in scene code. */
+/** mulberry32: tiny seeded PRNG. Returns floats in [0, 1). Scene code must never use the platform random function. */
 export type Rng = () => number
 
 export function mulberry32(seed: number): Rng {
