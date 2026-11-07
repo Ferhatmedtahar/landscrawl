@@ -9,3 +9,7 @@ without asking permission and without attribution.
 Full legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 The software itself is licensed separately under the MIT License (see LICENSE).
+
+The display typeface Bricolage Grotesque (src/ui/fonts/) is not part of this
+dedication: it is by The Bricolage Grotesque Project Authors and is licensed
+under the SIL Open Font License 1.1 (src/ui/fonts/OFL.txt).

@@ -3,6 +3,7 @@ import { parseDetailed } from '../parser/parse'
 import { Stage } from '../render/stage'
 import { RATIOS, type Ratio } from '../render/svgRenderer'
 import { buildScene } from '../scene/buildScene'
+import { makePalette } from '../scene/palette'
 import { resolveScene } from '../scene/resolve'
 import { describeScene } from './describe'
 import { downloadPng, downloadSvg } from './export'
@@ -32,7 +33,10 @@ export function startApp(): void {
 
   // static text from the language table
   const setText = (id: string, v: string) => { $(id).textContent = v }
-  setText('title', S.appName); setText('tagline', S.tagline); setText('label', S.label)
+  setText('wordmark', S.appName); setText('kicker', S.kicker); setText('headline', S.headline); setText('lede', S.lede)
+  setText('examples-title', S.examplesTitle); setText('examples-note', S.examplesNote); setText('how-title', S.howTitle); setText('license', S.license)
+  input.setAttribute('aria-label', S.label)
+  $('how').replaceChildren(...S.how.map((t) => Object.assign(document.createElement('p'), { textContent: t })))
   setText('btn-surprise', S.surprise); setText('btn-reroll', S.reroll); setText('legend-ratio', S.ratio)
   setText('chips-title', S.understood); setText('btn-png', S.png); setText('btn-svg', S.svg); setText('btn-copy', S.copy); setText('privacy', S.privacy)
   input.maxLength = MAX_TEXT
@@ -48,12 +52,37 @@ export function startApp(): void {
   const writeHash = () => { try { history.replaceState(null, '', encodeHash(st)) } catch { /* sandboxed frames may forbid it */ } }
   const scheduleHash = () => { window.clearTimeout(hashTimer); hashTimer = window.setTimeout(writeHash, 300) }
 
+  // faint drifting contour lines behind the page, as on the old Describble site
+  const lines = document.getElementById('lines') as unknown as SVGSVGElement
+  lines.setAttribute('viewBox', '0 0 1200 800')
+  lines.innerHTML = Array.from({ length: 12 }, (_, i) => {
+    const y = 40 + i * 64
+    let d = `M-20 ${y}`
+    for (let x = 0; x <= 1220; x += 60) d += `L${x} ${(y + Math.sin(x * 0.006 + i * 1.3) * 18 + Math.sin(x * 0.015 + i) * 6).toFixed(1)}`
+    return `<path d="${d}" fill="none" stroke="rgba(246,239,225,.06)" stroke-width="1.2"/>`
+  }).join('')
+
+  // "Start from one of these": each example is a button that draws it
+  $('examples').replaceChildren(...EXAMPLES.slice(0, 16).map((text) => {
+    const li = document.createElement('li')
+    const b = Object.assign(document.createElement('button'), { type: 'button', className: 'button', textContent: text })
+    b.addEventListener('click', () => {
+      st = { ...st, text }
+      input.value = text
+      render()
+      window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    })
+    li.append(b)
+    return li
+  }))
+
   let label = ''
   function render(): void {
     const parsed = parseDetailed(st.text, st.lang)
     stage.setScene(buildScene(parsed.state, st.seed), st.seed)
     label = describeScene(resolveScene(parsed.state, st.seed))
     stage.setLabel(label)
+    document.documentElement.style.setProperty('--accent', makePalette(resolveScene(parsed.state, st.seed)).sky[1])
 
     chipsEl.replaceChildren(
       ...(parsed.chips.length === 0
@@ -129,4 +158,5 @@ export function startApp(): void {
 
   applyRatio()
   render()
+  input.focus({ preventScroll: true })
 }

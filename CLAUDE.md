@@ -41,3 +41,8 @@ See `docs/ARCHITECTURE.md`. Only `src/render/stage.ts`, `src/ui/*` and `src/main
 ## Not allowed
 
 No accounts, backend, database, analytics, or AI/image-generation calls. No photo realism. Never copy other projects' names, logos or artwork. Nothing personal or secret in the repository.
+
+## UI notes
+
+- Styles are in `src/ui/style.css` (linked from `index.html`, inlined at build with the Bricolage Grotesque font, SIL OFL, in `src/ui/fonts/`). The look follows the earlier Describble site: night background, paper-coloured pill buttons, underlined text box, art with a ring and a glow tinted by the sky colour.
+- The strict CSP is added only in the production build (`vite.config.ts`); in dev it would block Vite's module script.

@@ -13,9 +13,10 @@ sahara dunes at night, full moon, a lone palm
 ![Six landscapes from six sentences](docs/gallery.png)
 
 - **100% client-side.** No backend, no API calls, no AI model, no account, no analytics. It works offline.
-- **One file.** `npm run build` produces a single `dist/index.html` (under 100 KB) that also runs from disk.
+- **One file.** `npm run build` produces a single `dist/index.html` (about 160 KB, font included) that also runs from disk.
 - **Vector output.** Export SVG or a 2x PNG, in 16:9, 4:3, 1:1 or 9:16.
 - **Shareable without a server.** The sentence, seed and shape live in the URL hash (`#s=…&t=…&l=en&r=16:9`), which browsers never send anywhere.
+- **Same look as Describble.** The page keeps the earlier project's layout, pill buttons and underlined input.
 - **Honest.** Words it does not understand are listed ("I didn't know: …"); nothing is silently ignored.
 - **Original art.** Code is MIT, the drawings are CC0 ([LICENSE](LICENSE), [LICENSE-ASSETS](LICENSE-ASSETS)).
 
