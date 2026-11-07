@@ -4,6 +4,7 @@ import { cloudsLayer } from './layers/clouds'
 import { foregroundLayer } from './layers/foreground'
 import { groundMid, groundNear } from './layers/ground'
 import { paperLayer } from './layers/paper'
+import { sceneryLayers } from './layers/scenery'
 import { skyLayer } from './layers/sky'
 import { terrainLayers } from './layers/terrain'
 import { waterLayers } from './layers/water'
@@ -25,6 +26,7 @@ export function buildScene(state: SceneState, seed: number): Layer[] {
     groundMid(r, pal, seed),
     ...waterLayers(r, pal, seed, water),
     groundNear(r, pal, seed, water),
+    ...sceneryLayers(r, pal, seed, water).layers,
     foregroundLayer(r, pal, seed, water),
     ...weatherLayers(r, pal, seed),
     paperLayer(seed),

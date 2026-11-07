@@ -1,5 +1,5 @@
 import { mulberry32, subSeed } from '../../render/prng'
-import { areaBelow, EDGE, f1, HORIZON, polyline, STEP, type Pt, type WaterGeo } from '../geometry'
+import { areaBelow, cliffGeometry, EDGE, f1, HORIZON, polyline, STEP, type Profile, type Pt, type WaterGeo } from '../geometry'
 import { mix, shade } from '../color'
 import type { LandKind, Pal } from '../palette'
 import { makeProfile, shadowFacets } from '../profiles'
@@ -19,16 +19,24 @@ export function groundMid(r: Resolved, pal: Pal, seed: number): Layer {
   return { id: 'ground-mid', depth: 0.55, defs, paths }
 }
 
+const isSandy = (r: Resolved, water: WaterGeo) => r.surface === 'sand' || (water.sea !== undefined && r.beach)
+
+/** The edge of the near strip: where dry land begins in front of the water. */
+export function shoreProfile(r: Resolved, seed: number, water: WaterGeo): Profile {
+  const sand = isSandy(r, water)
+  return makeProfile(sand ? 'dunes' : 'hills', subSeed(seed, 'ground-shore'), water.sea ? (r.beach ? 815 : 870) : 850, water.sea ? (r.beach ? 70 : 34) : sand ? 62 : 40)
+}
+
 /** Layer 7b: the near strip in front of the water: beach, bank, cliff. */
 export function groundNear(r: Resolved, pal: Pal, seed: number, water: WaterGeo): Layer {
   const rng = mulberry32(subSeed(seed, 'ground-near'))
-  const side = rng() < 0.5 ? 0 : 1
+  const side = cliffGeometry(seed).side
   const paths: PathSpec[] = []
-  const sand = r.surface === 'sand' || (water.sea !== undefined && r.beach)
+  const sand = isSandy(r, water)
   const kind: LandKind = sand ? 'sand' : landFor(r)
   const color = shade(pal.lit(pal.land(kind), 0), 0.94)
 
-  const shore = makeProfile(sand ? 'dunes' : 'hills', subSeed(seed, 'ground-shore'), water.sea ? (r.beach ? 815 : 870) : 850, water.sea ? (r.beach ? 70 : 34) : sand ? 62 : 40)
+  const shore = shoreProfile(r, seed, water)
   paths.push({ d: areaBelow(shore), fill: color })
   if (sand) for (const d of shadowFacets(shore, 10, 0.9)) paths.push({ d, fill: shade(color, 0.84), opacity: 0.5 })
   if (water.sea) {
@@ -40,8 +48,7 @@ export function groundNear(r: Resolved, pal: Pal, seed: number, water: WaterGeo)
   if (r.cliffs) {
     const x0 = side === 0 ? 0 : VIEW.w
     const dir = side === 0 ? 1 : -1
-    const top = 500 + rng() * 70
-    const w = 380 + rng() * 140
+    const { top, w } = cliffGeometry(seed)
     const pts: Pt[] = [[x0, top - 20]]
     for (let i = 1; i <= 6; i++) pts.push([x0 + dir * (w * 0.5 * (i / 6)), top - 20 + (i % 2 ? 6 : -4) + i * 3])
     pts.push([x0 + dir * w * 0.62, top + 30], [x0 + dir * (w - 36), top + 38], [x0 + dir * w, top + 34])

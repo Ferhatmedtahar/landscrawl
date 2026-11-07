@@ -1,10 +1,12 @@
 import { mulberry32, subSeed } from '../render/prng'
-import type { MoonPhase, Palette, SceneState, Terrain, TimeOfDay, Weather } from './types'
+import type { MoonPhase, Palette, SceneObject, SceneState, Terrain, TimeOfDay, Vegetation, Weather } from './types'
 
 export type WaterKind = 'sea' | 'lake' | 'river'
 export type Surface = 'grass' | 'sand' | 'snow' | 'rock' | 'marsh'
 
 /** SceneState with every "not mentioned" filled in from the seed. Pure and stable. */
+export interface ResolvedObject { kind: SceneObject; count: number; scale: number }
+
 export interface Resolved {
   seed: number
   time: TimeOfDay
@@ -26,18 +28,22 @@ export interface Resolved {
   palette: Palette
   grass: number
   flowers: number
+  vegetation: Vegetation
+  objects: ResolvedObject[]
   spooky: number
   smoke: boolean
   reflection: boolean
   state: SceneState
 }
 
+const DEFAULT_COUNT: Partial<Record<SceneObject, number>> = { birds: 6, camel: 2, penguins: 4 }
+
 const BACKDROP_PRIORITY: Terrain[] = ['volcano', 'canyon', 'mesa', 'mountains', 'glacier', 'dunes', 'hills', 'valley', 'tundra', 'savanna', 'swamp', 'plains', 'cliffs']
 
 export function resolveScene(state: SceneState, seed: number): Resolved {
   const rng = mulberry32(subSeed(seed, 'resolve'))
   // Draw every random number up front so unrelated words never reshuffle the defaults.
-  const [rTime, rTerrain, rLake, rCloud, rMoon, rBackdrop] = [rng(), rng(), rng(), rng(), rng(), rng()] as [number, number, number, number, number, number]
+  const [rTime, rTerrain, rLake, rCloud, rMoon, rBackdrop, rVeg, rVeg2] = [rng(), rng(), rng(), rng(), rng(), rng(), rng(), rng()] as [number, number, number, number, number, number, number, number]
   const said = (key: string) => state.confidence[key] !== undefined
   const pick = <T,>(list: readonly T[], r: number) => list[Math.min(list.length - 1, Math.floor(r * list.length))] as T
 
@@ -67,10 +73,39 @@ export function resolveScene(state: SceneState, seed: number): Resolved {
   const surface: Surface = snowCover >= 0.55 ? 'snow' : has('dunes') ? 'sand' : has('swamp') ? 'marsh' : has('mesa') || has('canyon') ? 'rock' : 'grass'
   const grass = said('vegetation.grass') ? state.vegetation.grass : surface === 'grass' ? 0.45 : 0.05
 
+  // Hints like "sahara may have a camel": the seed decides, once, per hint.
+  const realised = state.optional.filter((k) => mulberry32(subSeed(seed, `opt:${k}`))() < 0.5)
+  const veg: Vegetation = { ...state.vegetation }
+  let aurora = state.celestial.aurora
+  const extraObjects: SceneObject[] = []
+  for (const k of realised) {
+    const [group, name] = k.split('.') as [string, string]
+    if (group === 'vegetation' && typeof veg[name as keyof Vegetation] === 'number' && !said(k)) (veg as unknown as Record<string, number>)[name] = 0.3
+    else if (group === 'objects') extraObjects.push(name as SceneObject)
+    else if (k === 'celestial.aurora' && !said(k) && (time === 'night' || time === 'dusk')) aurora = 0.6
+  }
+  // Nothing said about plants: the seed plants a few that suit the ground.
+  const noPlants = !said('vegetation.forest') && !said('vegetation.pine') && !said('vegetation.palm') && !said('vegetation.cactus') && !said('vegetation.deadTrees') && !state.vegetation.loneTree
+  if (noPlants && veg.forest + veg.pine + veg.palm + veg.cactus + veg.deadTrees === 0) {
+    if (surface === 'snow') veg.pine = 0.15 + rVeg * 0.3
+    else if (surface === 'sand') { if (rVeg < 0.5) veg.cactus = 0.2 }
+    else if (surface === 'marsh') veg.deadTrees = 0.3 + rVeg * 0.2
+    else if (surface === 'rock') { if (rVeg < 0.5) veg.cactus = 0.2 }
+    else if (backdrop === 'mountains' && rVeg2 < 0.6) veg.pine = 0.2 + rVeg * 0.35
+    else veg.forest = rVeg * 0.45
+  }
+  const kinds: SceneObject[] = [...state.objects]
+  for (const k of extraObjects) if (!kinds.includes(k)) kinds.push(k)
+  const objects: ResolvedObject[] = kinds.map((kind) => ({
+    kind,
+    count: Math.max(1, Math.round(state.counts[`objects.${kind}`] ?? DEFAULT_COUNT[kind] ?? 1)),
+    scale: state.scale[`objects.${kind}`] ?? 1,
+  }))
+
   return {
-    seed, time, weather, sun, moon, stars, aurora: state.celestial.aurora, terrain, backdrop, waters,
+    seed, time, weather, sun, moon, stars, aurora, terrain, backdrop, waters,
     iceberg: has('iceberg'), waterfall: has('waterfall'), beach: has('beach'), cliffs: has('cliffs'),
-    surface, snowCover, palette: state.palette, grass, flowers: state.vegetation.flowers,
+    surface, snowCover, palette: state.palette, grass, flowers: state.vegetation.flowers, vegetation: veg, objects,
     spooky: state.mood.spooky, smoke: state.details.smoke, reflection: state.details.reflection, state,
   }
 }

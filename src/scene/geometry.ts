@@ -45,6 +45,14 @@ export function areaBelow(profile: Profile, bottom: number = VIEW.h + 40): strin
   return polyline(pts) + `L${VIEW.w + EDGE} ${bottom}L${-EDGE} ${bottom}Z`
 }
 
+export interface CliffGeo { side: 0 | 1; top: number; w: number }
+
+/** Where a sea cliff stands, shared by drawing and placement. */
+export function cliffGeometry(seed: number): CliffGeo {
+  const rng = mulberry32(subSeed(seed, 'cliff-geo'))
+  return { side: rng() < 0.5 ? 0 : 1, top: 500 + rng() * 70, w: 380 + rng() * 140 }
+}
+
 export interface WaterGeo {
   sea?: { top: number }
   lake?: { cx: number; cy: number; rx: number; ry: number; pts: Pt[] }
