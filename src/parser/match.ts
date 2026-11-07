@@ -19,8 +19,10 @@ export interface Match {
   level?: number
   scale?: number
   quantity?: number
-  /** For colours: attached to a noun? */
+  /** For modifiers and colours: attached to a noun? */
   attached?: boolean
+  /** Index (in the match list) of the trait this modifier or colour belongs to. */
+  target?: number
 }
 
 const CONFIDENCE: Record<Via, number> = { exact: 1, stem: 0.9, typo: 0.6, digit: 1, none: 0 }

@@ -85,7 +85,17 @@
   "amazing",
   "stunning",
   "wonderful",
-  "pleasant"
+  "pleasant",
+  "old",
+  "ancient",
+  "wooden",
+  "stone",
+  "dirt",
+  "bright",
+  "wild",
+  "tall",
+  "deep",
+  "calmly"
  ],
  "connectors": [
   "or",
@@ -403,7 +413,8 @@
   {
    "keys": [
     "milky way",
-    "starfield"
+    "starfield",
+    "shooting star"
    ],
    "set": {
     "celestial.stars": 1.0
@@ -756,7 +767,8 @@
     "terrain+": [
      "valley"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -770,7 +782,8 @@
     "terrain+": [
      "cliffs"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -783,7 +796,8 @@
     "terrain+": [
      "canyon"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -796,7 +810,8 @@
     "terrain+": [
      "mesa"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -809,7 +824,8 @@
      "volcano"
     ],
     "details.smoke": true
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -821,7 +837,8 @@
      "tundra"
     ],
     "surface.snowCover": 0.4
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -838,7 +855,8 @@
      "glacier"
     ],
     "surface.snowCover": 0.5
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -849,7 +867,8 @@
     "terrain+": [
      "savanna"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -864,7 +883,8 @@
     "terrain+": [
      "swamp"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [
@@ -892,7 +912,8 @@
     "terrain+": [
      "island"
     ]
-   }
+   },
+   "tint": "groundTint"
   },
   {
    "keys": [

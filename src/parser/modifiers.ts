@@ -27,6 +27,7 @@ export function attachModifiers(matches: Match[]): void {
     if (e.scale !== undefined) target.scale = e.scale
     if (e.quantity !== undefined) target.quantity = e.quantity
     m.attached = true
+    m.target = j
   })
 }
 
@@ -37,6 +38,6 @@ export function attachColors(matches: Match[]): void {
     const j = nextTrait(matches, i)
     if (j < 0) return
     const target = matches[j] as Match
-    if (target.hit?.kind === 'trait' && target.hit.entry.tint && !target.negated) m.attached = true
+    if (target.hit?.kind === 'trait' && target.hit.entry.tint && !target.negated) { m.attached = true; m.target = j }
   })
 }

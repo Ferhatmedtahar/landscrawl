@@ -4,26 +4,90 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Landscrawl</title>
+  <meta name="description" content="Type a sentence and a hand-drawn landscape is drawn live in your browser. No accounts, no servers, no AI.">
+  <meta name="color-scheme" content="dark">
   <style>
-    :root { color-scheme: dark; }
+    :root { color-scheme: dark; --bg: #121419; --panel: #1b1e26; --line: #2d323d; --text: #ecebe6; --dim: #a1a5b0; --accent: #f0b35a; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #14161a; color: #e8e6e1; font-family: system-ui, sans-serif; }
-    main { width: min(960px, 94vw); display: grid; gap: 12px; }
-    #stage { width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; }
-    #stage svg { display: block; width: 100%; height: 100%; }
-    textarea { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #333; background: #1c1f25; color: inherit; font: inherit; resize: vertical; }
-    .sr { position: absolute; left: -9999px; }
-    p { margin: 0; opacity: .7; font-size: .9rem; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh; }
+    .app { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 24px; align-items: start; }
+    .stage-col { position: sticky; top: 24px; display: grid; gap: 10px; }
+    .stage { --ratio: 1.7778; aspect-ratio: var(--ratio); width: min(100%, calc(82vh * var(--ratio))); margin: 0 auto; border-radius: 16px; overflow: hidden; background: #0b0c10; box-shadow: 0 18px 50px rgba(0,0,0,.45); cursor: grab; user-select: none; }
+    .stage:active { cursor: grabbing; }
+    .stage svg { display: block; width: 100%; height: 100%; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 16px; }
+    h1 { font-size: 1.7rem; margin: 0; letter-spacing: -.02em; }
+    h2 { font-size: .8rem; margin: 0; text-transform: uppercase; letter-spacing: .08em; color: var(--dim); font-weight: 600; }
+    #tagline { margin: 2px 0 0; color: var(--dim); }
+    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    textarea { width: 100%; min-height: 110px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: #14171d; color: var(--text); font: inherit; resize: vertical; }
+    textarea:focus-visible, button:focus-visible, input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; }
+    button { font: inherit; color: var(--text); background: #262a35; border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; cursor: pointer; }
+    button:hover { background: #2f3441; }
+    button.primary { background: var(--accent); color: #1a1408; border-color: transparent; font-weight: 600; }
+    button.primary:hover { background: #f6c27a; }
+    fieldset { border: 0; padding: 0; margin: 0; }
+    legend { font-weight: 600; margin-bottom: 6px; padding: 0; }
+    .ratios { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ratios label { margin: 0; font-weight: 500; }
+    .ratios input { position: absolute; opacity: 0; }
+    .ratios span { display: inline-block; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; background: #14171d; }
+    .ratios input:checked + span { background: var(--accent); color: #1a1408; border-color: transparent; font-weight: 600; }
+    .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 6px 0 0; min-height: 2rem; }
+    .chip { padding: 3px 10px; border-radius: 999px; font-size: .9rem; background: #232836; }
+    .chip:hover { background: #3a2f2f; text-decoration: line-through; }
+    .hint { color: var(--dim); font-size: .9rem; }
+    #status { color: var(--dim); font-size: .9rem; min-height: 1.4em; }
+    .privacy { color: var(--dim); font-size: .85rem; margin: 0; }
+    #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: #fff; color: #111; padding: 8px 16px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; max-width: 90vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 860px) { .app { grid-template-columns: 1fr; padding: 12px; } .stage-col { position: static; } }
+    @media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
   </style>
 </head>
 <body>
-  <main>
-    <div id="stage" role="img" aria-label="A hand-drawn landscape"></div>
-    <label for="text" class="sr">Describe a landscape</label>
-    <textarea id="text" rows="2" spellcheck="false"></textarea>
-    <p id="unknown" aria-live="polite"></p>
-    <p>Landscrawl · M3 preview. Seed: add <code>#s=123</code>. Text: <code>#t=foggy lake at dawn</code>.</p>
+  <main class="app">
+    <section class="stage-col" aria-label="Landscape">
+      <div id="stage" class="stage"></div>
+      <div id="status" role="status" aria-live="polite"></div>
+    </section>
+    <section class="panel">
+      <header>
+        <h1 id="title">Landscrawl</h1>
+        <p id="tagline"></p>
+      </header>
+      <div>
+        <label for="text" id="label"></label>
+        <textarea id="text" spellcheck="false" autocomplete="off" autofocus></textarea>
+      </div>
+      <div class="row">
+        <button id="btn-surprise" class="primary" type="button"></button>
+        <button id="btn-reroll" type="button"></button>
+      </div>
+      <fieldset>
+        <legend id="legend-ratio"></legend>
+        <div class="ratios">
+          <label><input type="radio" name="ratio" value="16:9"><span>16:9</span></label>
+          <label><input type="radio" name="ratio" value="4:3"><span>4:3</span></label>
+          <label><input type="radio" name="ratio" value="1:1"><span>1:1</span></label>
+          <label><input type="radio" name="ratio" value="9:16"><span>9:16</span></label>
+        </div>
+      </fieldset>
+      <div>
+        <h2 id="chips-title"></h2>
+        <ul id="chips" class="chips"></ul>
+      </div>
+      <div class="row">
+        <button id="btn-png" type="button"></button>
+        <button id="btn-svg" type="button"></button>
+        <button id="btn-copy" type="button"></button>
+      </div>
+      <p id="privacy" class="privacy"></p>
+    </section>
   </main>
+  <div id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import type { Match } from './match'
 import { scan } from './match'
 import { attachColors, attachModifiers, nextTrait } from './modifiers'
 import { resolveNegations } from './negation'
-import { tokenize } from './tokenize'
+import { tokenizeSpans, type Token } from './tokenize'
 
 /** Plain mentions ("rain", "fog") are written at 0.6 in the lexicon; "heavy" (0.9) scales them by 1.5, "light" (0.3) by 0.5. */
 const BASELINE = 0.6
@@ -82,10 +82,25 @@ function applyOp(state: SceneState, op: Op, negate: boolean): void {
 /** Ids that negation tracks: a whole slot for the moon, a specific value for time. */
 const negationId = (op: Op) => (op.key === 'celestial.moon' ? 'celestial.moon' : op.id)
 
+/** A recognised thing the user can see and remove: a trait with its modifiers and colour. */
+export interface Chip {
+  label: string
+  /** Character range in the original text covering the trait and what is attached to it. */
+  start: number
+  end: number
+}
+
+export interface Parsed { state: SceneState; chips: Chip[] }
+
 export function parse(text: string, lang = 'en'): SceneState {
+  return parseDetailed(text, lang).state
+}
+
+export function parseDetailed(text: string, lang = 'en'): Parsed {
   const lex = getLexicon(lang)
   const state = emptyScene()
-  const matches = scan(tokenize(text), lex)
+  const tokens: Token[] = tokenizeSpans(text)
+  const matches = scan(tokens.map((t) => t.text), lex)
   resolveNegations(matches)
   attachModifiers(matches)
   attachColors(matches)
@@ -146,7 +161,16 @@ export function parse(text: string, lang = 'en'): SceneState {
 
   // Drop hints the text already settled or negated.
   state.optional = state.optional.filter((k) => !negated.has(k) && !hasTrait(state, k))
-  return state
+
+  const chips: Chip[] = []
+  matches.forEach((m, i) => {
+    if (m.kind !== 'trait' || m.negated || m.hit?.kind !== 'trait' || Object.keys(m.hit.entry.set).length === 0) return
+    let first = m.start
+    matches.forEach((o) => { if (o.target === i && o.attached) first = Math.min(first, o.start) })
+    const start = (tokens[first] as Token).start, end = (tokens[m.end - 1] as Token).end
+    chips.push({ label: text.slice(start, end), start, end })
+  })
+  return { state, chips }
 }
 
 function hasTrait(state: SceneState, key: string): boolean {
