@@ -1,0 +1,20 @@
+{
+  "name": "landscrawl",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Type a sentence, get a hand-drawn landscape. 100% client-side.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^5.1.0"
+  }
+}
