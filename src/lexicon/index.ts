@@ -71,14 +71,23 @@ export function buildLexicon(raw: RawLexicon): Lexicon {
   return { lang: raw.lang, exact, stemmed, typoKeys }
 }
 
-const LEXICONS: Record<string, Lexicon> = { en: buildLexicon(en as unknown as RawLexicon) }
-export const LANGS = Object.keys(LEXICONS)
+const LEXICONS: Record<string, Lexicon> = {}
+/** The raw JSON of every registered language, for validation tests and tools. */
+export const rawLexicons: Record<string, RawLexicon> = {}
+
+/** Add a language. To ship one: drop `lexicon.<code>.json` here, register it below, add UI strings in ui/i18n.ts. */
+export function registerLexicon(raw: RawLexicon): void {
+  LEXICONS[raw.lang] = buildLexicon(raw)
+  rawLexicons[raw.lang] = raw
+}
+
+registerLexicon(en as unknown as RawLexicon)
+
+export const languages = (): string[] => Object.keys(LEXICONS)
 
 export function getLexicon(lang: string): Lexicon {
   return LEXICONS[lang] ?? (LEXICONS.en as Lexicon)
 }
-
-export const rawLexicons: Record<string, RawLexicon> = { en: en as unknown as RawLexicon }
 
 /** Typo rule: 5+ letters, same first letter, edit distance 1 (a swap counts as 1). First alphabetical wins on ties. */
 export function findTypo(lex: Lexicon, word: string): Hit | undefined {

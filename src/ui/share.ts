@@ -1,9 +1,9 @@
 import type { Ratio } from '../render/svgRenderer'
 import { RATIOS } from '../render/svgRenderer'
+import { languages } from '../lexicon'
 
 export interface ShareState { seed: number; text: string; lang: string; ratio: Ratio }
 
-export const LANGUAGES = ['en'] as const
 export const MAX_TEXT = 500
 const MAX_SEED = 4294967295
 
@@ -19,7 +19,7 @@ export function decodeHash(hash: string, fallback: ShareState): ShareState {
   const rawSeed = p.get('s')
   const seed = rawSeed !== null && /^\d{1,10}$/.test(rawSeed) && Number(rawSeed) <= MAX_SEED ? Number(rawSeed) : fallback.seed
   const text = p.get('t') !== null ? (p.get('t') as string).slice(0, MAX_TEXT) : fallback.text
-  const lang = (LANGUAGES as readonly string[]).includes(p.get('l') ?? '') ? (p.get('l') as string) : fallback.lang
+  const lang = languages().includes(p.get('l') ?? '') ? (p.get('l') as string) : fallback.lang
   const r = p.get('r') ?? ''
   const ratio = (r in RATIOS ? r : fallback.ratio) as Ratio
   return { seed, text, lang, ratio }

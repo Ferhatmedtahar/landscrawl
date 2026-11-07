@@ -47,6 +47,6 @@ describe('English lexicon', () => {
   })
   it('has a rich vocabulary', () => {
     const words = raw.traits.reduce((n, e) => n + e.keys.length, 0)
-    expect(words).toBeGreaterThan(450)
+    expect(words).toBeGreaterThan(560)
   })
 })

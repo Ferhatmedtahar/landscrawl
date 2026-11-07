@@ -45,4 +45,9 @@ export const EN: LangMeta = {
 }
 
 export const LANGS: Record<string, LangMeta> = { en: EN }
+
+/** Add UI strings for a language (set dir: 'rtl' for Arabic, Hebrew, ...). */
+export function registerLanguage(meta: LangMeta): void {
+  LANGS[meta.code] = meta
+}
 export const langMeta = (code: string): LangMeta => LANGS[code] ?? EN
