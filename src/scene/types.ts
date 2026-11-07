@@ -23,7 +23,8 @@ export interface Vegetation {
   forest: number; pine: number; palm: number; grass: number; flowers: number
   cactus: number; deadTrees: number; loneTree: boolean
 }
-export interface Palette { skyTint?: string; groundTint?: string; waterTint?: string }
+export interface Palette { skyTint?: string; groundTint?: string; waterTint?: string; foliageTint?: string }
+export interface Surface { snowCover: number }
 export interface Mood { cozy: number; lonely: number; grand: number; spooky: number }
 export interface Details { litWindows: boolean; smoke: boolean; reflection: boolean }
 
@@ -37,8 +38,17 @@ export interface SceneState {
   palette: Palette
   mood: Mood
   details: Details
+  surface: Surface
+  /** Size multipliers by trait key ("objects.village": 0.5 for "tiny village"). Missing = 1. */
+  scale: Record<string, number>
+  /** Explicit counts by trait key ("objects.boat": 2 for "two boats"). */
+  counts: Record<string, number>
+  /** Trait keys a word hints at but does not demand; the seed decides later ("coast" may add a lighthouse). */
+  optional: string[]
   confidence: Record<string, number>
   unknownWords: string[]
+  /** Understood words that had nothing to attach to (a colour with no noun, a stray "no"). */
+  unusedWords: string[]
 }
 
 export function emptyScene(): SceneState {
@@ -52,8 +62,13 @@ export function emptyScene(): SceneState {
     palette: {},
     mood: { cozy: 0, lonely: 0, grand: 0, spooky: 0 },
     details: { litWindows: false, smoke: false, reflection: false },
+    surface: { snowCover: 0 },
+    scale: {},
+    counts: {},
+    optional: [],
     confidence: {},
     unknownWords: [],
+    unusedWords: [],
   }
 }
 

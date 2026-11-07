@@ -1,0 +1,2018 @@
+{
+ "lang": "en",
+ "stopwords": [
+  "a",
+  "an",
+  "the",
+  "of",
+  "and",
+  "with",
+  "in",
+  "on",
+  "at",
+  "by",
+  "near",
+  "next",
+  "to",
+  "over",
+  "under",
+  "above",
+  "below",
+  "beside",
+  "behind",
+  "around",
+  "its",
+  "it",
+  "is",
+  "are",
+  "there",
+  "this",
+  "that",
+  "very",
+  "quite",
+  "really",
+  "from",
+  "into",
+  "onto",
+  "through",
+  "along",
+  "across",
+  "toward",
+  "towards",
+  "just",
+  "then",
+  "also",
+  "while",
+  "where",
+  "which",
+  "scene",
+  "landscape",
+  "picture",
+  "view",
+  "image",
+  "drawing",
+  "painting",
+  "any",
+  "other",
+  "be",
+  "being",
+  "has",
+  "have",
+  "having",
+  "i",
+  "want",
+  "wanted",
+  "would",
+  "like",
+  "draw",
+  "show",
+  "make",
+  "please",
+  "give",
+  "me",
+  "my",
+  "up",
+  "down",
+  "out",
+  "for",
+  "as",
+  "but",
+  "beautiful",
+  "pretty",
+  "nice",
+  "lovely",
+  "gorgeous",
+  "amazing",
+  "stunning",
+  "wonderful",
+  "pleasant"
+ ],
+ "connectors": [
+  "or",
+  "nor"
+ ],
+ "negators": [
+  "no",
+  "without",
+  "not",
+  "minus",
+  "zero"
+ ],
+ "modifiers": [
+  {
+   "keys": [
+    "heavy",
+    "thick",
+    "dense",
+    "intense",
+    "lots of",
+    "a lot of",
+    "plenty of",
+    "many",
+    "heavily"
+   ],
+   "level": 0.9
+  },
+  {
+   "keys": [
+    "torrential",
+    "extreme",
+    "blinding"
+   ],
+   "level": 1.0
+  },
+  {
+   "keys": [
+    "moderate",
+    "some"
+   ],
+   "level": 0.5
+  },
+  {
+   "keys": [
+    "light",
+    "thin",
+    "a bit of",
+    "a few",
+    "few",
+    "sparse",
+    "scattered",
+    "slight",
+    "gentle",
+    "faint"
+   ],
+   "level": 0.3
+  },
+  {
+   "keys": [
+    "tiny",
+    "little"
+   ],
+   "scale": 0.5
+  },
+  {
+   "keys": [
+    "small"
+   ],
+   "scale": 0.7
+  },
+  {
+   "keys": [
+    "big",
+    "large"
+   ],
+   "scale": 1.3
+  },
+  {
+   "keys": [
+    "huge",
+    "giant",
+    "massive"
+   ],
+   "scale": 1.6
+  },
+  {
+   "keys": [
+    "enormous",
+    "colossal"
+   ],
+   "scale": 1.8
+  },
+  {
+   "keys": [
+    "one",
+    "single",
+    "lone",
+    "solitary",
+    "a single"
+   ],
+   "quantity": 1
+  },
+  {
+   "keys": [
+    "two",
+    "a couple of",
+    "couple of",
+    "a pair of",
+    "pair of"
+   ],
+   "quantity": 2
+  },
+  {
+   "keys": [
+    "three",
+    "several"
+   ],
+   "quantity": 3
+  }
+ ],
+ "colors": {
+  "red": "#c8423b",
+  "crimson": "#a3263a",
+  "scarlet": "#d8402e",
+  "orange": "#e8883a",
+  "amber": "#e5a22e",
+  "yellow": "#e8c93f",
+  "gold": "#d9a83a",
+  "golden": "#d9a83a",
+  "green": "#4c9a58",
+  "emerald": "#2e9d6a",
+  "teal": "#2a9d9a",
+  "turquoise": "#3cc3c4",
+  "cyan": "#3fc0e0",
+  "blue": "#3f78c8",
+  "navy": "#1f3a6e",
+  "indigo": "#4b3fa0",
+  "purple": "#7b4fa8",
+  "violet": "#8e5bc4",
+  "lavender": "#b9a5dc",
+  "magenta": "#c43f9a",
+  "pink": "#e88fb0",
+  "rose": "#d9628a",
+  "brown": "#8a5a3a",
+  "beige": "#d9c7a0",
+  "grey": "#8a8f96",
+  "gray": "#8a8f96",
+  "silver": "#b8bec6",
+  "white": "#f2f4f6",
+  "black": "#1c1c22"
+ },
+ "traits": [
+  {
+   "keys": [
+    "dawn",
+    "sunrise",
+    "daybreak",
+    "first light",
+    "early morning",
+    "morning",
+    "sunup"
+   ],
+   "set": {
+    "time": "dawn"
+   }
+  },
+  {
+   "keys": [
+    "rising sun"
+   ],
+   "set": {
+    "time": "dawn",
+    "celestial.sun": true
+   }
+  },
+  {
+   "keys": [
+    "day",
+    "daytime",
+    "noon",
+    "midday",
+    "afternoon",
+    "daylight"
+   ],
+   "set": {
+    "time": "day"
+   }
+  },
+  {
+   "keys": [
+    "midday sun"
+   ],
+   "set": {
+    "time": "day",
+    "celestial.sun": true
+   }
+  },
+  {
+   "keys": [
+    "sunny",
+    "sunshine"
+   ],
+   "set": {
+    "celestial.sun": true,
+    "weather.clouds": 0.1
+   }
+  },
+  {
+   "keys": [
+    "sunset",
+    "sundown",
+    "golden hour",
+    "evening glow"
+   ],
+   "set": {
+    "time": "sunset"
+   }
+  },
+  {
+   "keys": [
+    "setting sun"
+   ],
+   "set": {
+    "time": "sunset",
+    "celestial.sun": true
+   }
+  },
+  {
+   "keys": [
+    "dusk",
+    "twilight",
+    "blue hour",
+    "gloaming",
+    "evening"
+   ],
+   "set": {
+    "time": "dusk"
+   }
+  },
+  {
+   "keys": [
+    "night",
+    "midnight",
+    "nighttime",
+    "night time",
+    "nightfall"
+   ],
+   "set": {
+    "time": "night"
+   }
+  },
+  {
+   "keys": [
+    "sun"
+   ],
+   "set": {
+    "celestial.sun": true
+   }
+  },
+  {
+   "keys": [
+    "moon"
+   ],
+   "set": {
+    "celestial.moon": "full"
+   }
+  },
+  {
+   "keys": [
+    "full moon"
+   ],
+   "set": {
+    "celestial.moon": "full"
+   }
+  },
+  {
+   "keys": [
+    "half moon"
+   ],
+   "set": {
+    "celestial.moon": "half"
+   }
+  },
+  {
+   "keys": [
+    "crescent moon",
+    "crescent",
+    "new moon"
+   ],
+   "set": {
+    "celestial.moon": "crescent"
+   }
+  },
+  {
+   "keys": [
+    "moonlight",
+    "moonlit"
+   ],
+   "set": {
+    "celestial.moon": "full",
+    "time": "night"
+   }
+  },
+  {
+   "keys": [
+    "star",
+    "starry",
+    "starlit",
+    "starlight"
+   ],
+   "set": {
+    "celestial.stars": 0.8
+   }
+  },
+  {
+   "keys": [
+    "milky way",
+    "starfield"
+   ],
+   "set": {
+    "celestial.stars": 1.0
+   }
+  },
+  {
+   "keys": [
+    "aurora",
+    "northern lights",
+    "aurora borealis",
+    "polar lights",
+    "southern lights"
+   ],
+   "set": {
+    "celestial.aurora": 0.9
+   }
+  },
+  {
+   "keys": [
+    "cloud",
+    "clouds"
+   ],
+   "set": {
+    "weather.clouds": 0.6
+   },
+   "tint": "skyTint"
+  },
+  {
+   "keys": [
+    "cloudy"
+   ],
+   "set": {
+    "weather.clouds": 0.7
+   }
+  },
+  {
+   "keys": [
+    "overcast",
+    "grey sky",
+    "gray sky"
+   ],
+   "set": {
+    "weather.clouds": 0.9
+   }
+  },
+  {
+   "keys": [
+    "partly cloudy"
+   ],
+   "set": {
+    "weather.clouds": 0.35
+   }
+  },
+  {
+   "keys": [
+    "cloudless",
+    "clear sky",
+    "clear skies",
+    "cloud free"
+   ],
+   "set": {
+    "weather.clouds": 0
+   }
+  },
+  {
+   "keys": [
+    "rain",
+    "rainy",
+    "raining",
+    "rainfall"
+   ],
+   "set": {
+    "weather.rain": 0.6,
+    "weather.clouds": 0.7
+   }
+  },
+  {
+   "keys": [
+    "drizzle",
+    "drizzly"
+   ],
+   "set": {
+    "weather.rain": 0.25
+   }
+  },
+  {
+   "keys": [
+    "downpour",
+    "pouring"
+   ],
+   "set": {
+    "weather.rain": 0.95,
+    "weather.clouds": 0.9
+   }
+  },
+  {
+   "keys": [
+    "shower"
+   ],
+   "set": {
+    "weather.rain": 0.5
+   }
+  },
+  {
+   "keys": [
+    "storm",
+    "stormy",
+    "thunderstorm",
+    "thunder",
+    "tempest",
+    "lightning"
+   ],
+   "set": {
+    "weather.rain": 0.8,
+    "weather.wind": 0.7,
+    "weather.clouds": 0.9,
+    "mood.spooky": 0.3
+   }
+  },
+  {
+   "keys": [
+    "monsoon"
+   ],
+   "set": {
+    "weather.rain": 0.9,
+    "weather.clouds": 0.9
+   }
+  },
+  {
+   "keys": [
+    "snow"
+   ],
+   "set": {
+    "weather.snow": 0.6,
+    "surface.snowCover": 0.6
+   }
+  },
+  {
+   "keys": [
+    "snowy"
+   ],
+   "set": {
+    "surface.snowCover": 0.8
+   }
+  },
+  {
+   "keys": [
+    "snowing",
+    "snowfall",
+    "snowflake",
+    "flurry"
+   ],
+   "set": {
+    "weather.snow": 0.6
+   }
+  },
+  {
+   "keys": [
+    "blizzard",
+    "snowstorm"
+   ],
+   "set": {
+    "weather.snow": 0.95,
+    "weather.wind": 0.9,
+    "weather.fog": 0.3,
+    "weather.clouds": 0.8,
+    "surface.snowCover": 0.9
+   }
+  },
+  {
+   "keys": [
+    "snowcapped",
+    "snow capped",
+    "snow covered",
+    "snowclad",
+    "snow topped"
+   ],
+   "set": {
+    "surface.snowCover": 0.6
+   }
+  },
+  {
+   "keys": [
+    "fog",
+    "foggy"
+   ],
+   "set": {
+    "weather.fog": 0.6
+   }
+  },
+  {
+   "keys": [
+    "mist",
+    "misty"
+   ],
+   "set": {
+    "weather.fog": 0.35
+   }
+  },
+  {
+   "keys": [
+    "haze",
+    "hazy"
+   ],
+   "set": {
+    "weather.fog": 0.3
+   }
+  },
+  {
+   "keys": [
+    "wind",
+    "windy"
+   ],
+   "set": {
+    "weather.wind": 0.6
+   }
+  },
+  {
+   "keys": [
+    "breeze",
+    "breezy"
+   ],
+   "set": {
+    "weather.wind": 0.3
+   }
+  },
+  {
+   "keys": [
+    "gale",
+    "windswept",
+    "gusty"
+   ],
+   "set": {
+    "weather.wind": 0.9
+   }
+  },
+  {
+   "keys": [
+    "calm",
+    "still",
+    "windless"
+   ],
+   "set": {
+    "weather.wind": 0
+   }
+  },
+  {
+   "keys": [
+    "sandstorm",
+    "dust storm",
+    "duststorm"
+   ],
+   "set": {
+    "weather.wind": 0.9,
+    "weather.fog": 0.5,
+    "palette.groundTint": "#d9a85b"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "mountain",
+    "mountainous",
+    "mountainside",
+    "peak",
+    "summit",
+    "mountain range"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains"
+    ]
+   },
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "hill",
+    "hilly",
+    "hillside",
+    "rolling hills"
+   ],
+   "set": {
+    "terrain+": [
+     "hills"
+    ]
+   },
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "dune",
+    "sand",
+    "sand dune"
+   ],
+   "set": {
+    "terrain+": [
+     "dunes"
+    ]
+   },
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "sandy"
+   ],
+   "set": {
+    "palette.groundTint": "#e3c58b"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "plain",
+    "flatland",
+    "flat land",
+    "prairie",
+    "steppe",
+    "grassland",
+    "field",
+    "open field"
+   ],
+   "set": {
+    "terrain+": [
+     "plains"
+    ]
+   },
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "meadow"
+   ],
+   "set": {
+    "terrain+": [
+     "plains"
+    ],
+    "vegetation.grass": 0.7,
+    "vegetation.flowers": 0.4
+   }
+  },
+  {
+   "keys": [
+    "valley",
+    "glen",
+    "vale",
+    "dale"
+   ],
+   "set": {
+    "terrain+": [
+     "valley"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "cliff",
+    "crag",
+    "bluff",
+    "escarpment",
+    "sea cliff"
+   ],
+   "set": {
+    "terrain+": [
+     "cliffs"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "canyon",
+    "gorge",
+    "ravine",
+    "chasm"
+   ],
+   "set": {
+    "terrain+": [
+     "canyon"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "mesa",
+    "plateau",
+    "butte",
+    "tableland"
+   ],
+   "set": {
+    "terrain+": [
+     "mesa"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "volcano",
+    "volcanic",
+    "crater"
+   ],
+   "set": {
+    "terrain+": [
+     "volcano"
+    ],
+    "details.smoke": true
+   }
+  },
+  {
+   "keys": [
+    "tundra",
+    "permafrost"
+   ],
+   "set": {
+    "terrain+": [
+     "tundra"
+    ],
+    "surface.snowCover": 0.4
+   }
+  },
+  {
+   "keys": [
+    "glacier",
+    "ice sheet",
+    "icefield",
+    "ice field",
+    "ice cap",
+    "icecap",
+    "ice"
+   ],
+   "set": {
+    "terrain+": [
+     "glacier"
+    ],
+    "surface.snowCover": 0.5
+   }
+  },
+  {
+   "keys": [
+    "savanna",
+    "savannah"
+   ],
+   "set": {
+    "terrain+": [
+     "savanna"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "swamp",
+    "marsh",
+    "bog",
+    "wetland",
+    "bayou",
+    "mangrove"
+   ],
+   "set": {
+    "terrain+": [
+     "swamp"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "beach",
+    "shore",
+    "shoreline",
+    "seashore"
+   ],
+   "set": {
+    "terrain+": [
+     "beach"
+    ]
+   },
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "island",
+    "islet",
+    "isle",
+    "archipelago",
+    "atoll"
+   ],
+   "set": {
+    "terrain+": [
+     "island"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "sea",
+    "ocean",
+    "wave",
+    "surf"
+   ],
+   "set": {
+    "terrain+": [
+     "sea"
+    ]
+   },
+   "tint": "waterTint"
+  },
+  {
+   "keys": [
+    "bay",
+    "cove"
+   ],
+   "set": {
+    "terrain+": [
+     "sea",
+     "beach"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "harbor",
+    "harbour",
+    "port",
+    "dock",
+    "pier"
+   ],
+   "set": {
+    "terrain+": [
+     "sea"
+    ],
+    "objects+": [
+     "boat"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "lake",
+    "lagoon",
+    "loch",
+    "mere"
+   ],
+   "set": {
+    "terrain+": [
+     "lake"
+    ]
+   },
+   "tint": "waterTint"
+  },
+  {
+   "keys": [
+    "pond"
+   ],
+   "set": {
+    "terrain+": [
+     "lake"
+    ]
+   },
+   "tint": "waterTint",
+   "scale": 0.5
+  },
+  {
+   "keys": [
+    "river",
+    "stream",
+    "creek",
+    "brook",
+    "rapids"
+   ],
+   "set": {
+    "terrain+": [
+     "river"
+    ]
+   },
+   "tint": "waterTint"
+  },
+  {
+   "keys": [
+    "waterfall",
+    "cascade"
+   ],
+   "set": {
+    "terrain+": [
+     "waterfall"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "iceberg",
+    "ice floe",
+    "floe",
+    "pack ice"
+   ],
+   "set": {
+    "terrain+": [
+     "sea",
+     "iceberg"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "sky",
+    "skies",
+    "heavens"
+   ],
+   "set": {},
+   "tint": "skyTint"
+  },
+  {
+   "keys": [
+    "ground",
+    "earth",
+    "soil",
+    "land"
+   ],
+   "set": {},
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "water"
+   ],
+   "set": {},
+   "tint": "waterTint"
+  },
+  {
+   "keys": [
+    "forest",
+    "woods",
+    "woodland",
+    "wood",
+    "grove",
+    "orchard"
+   ],
+   "set": {
+    "vegetation.forest": 0.6
+   },
+   "tint": "foliageTint"
+  },
+  {
+   "keys": [
+    "tree",
+    "oak",
+    "birch",
+    "willow",
+    "maple",
+    "elm",
+    "poplar"
+   ],
+   "set": {
+    "vegetation.forest": 0.5
+   },
+   "single": {
+    "vegetation.loneTree": true
+   },
+   "tint": "foliageTint"
+  },
+  {
+   "keys": [
+    "pine",
+    "fir",
+    "spruce",
+    "conifer",
+    "evergreen"
+   ],
+   "set": {
+    "vegetation.pine": 0.6
+   },
+   "single": {
+    "vegetation.pine": 0.3,
+    "vegetation.loneTree": true
+   },
+   "tint": "foliageTint"
+  },
+  {
+   "keys": [
+    "pine forest",
+    "pine wood",
+    "pine woods",
+    "fir forest",
+    "spruce forest"
+   ],
+   "set": {
+    "vegetation.pine": 0.8,
+    "vegetation.forest": 0.4
+   },
+   "tint": "foliageTint"
+  },
+  {
+   "keys": [
+    "palm",
+    "palm tree",
+    "coconut",
+    "date palm"
+   ],
+   "set": {
+    "vegetation.palm": 0.5
+   },
+   "single": {
+    "vegetation.palm": 0.3,
+    "vegetation.loneTree": true
+   },
+   "tint": "foliageTint"
+  },
+  {
+   "keys": [
+    "palm grove",
+    "palmeraie",
+    "palm forest"
+   ],
+   "set": {
+    "vegetation.palm": 0.9
+   },
+   "tint": "foliageTint"
+  },
+  {
+   "keys": [
+    "grass",
+    "grassy",
+    "lawn",
+    "turf",
+    "heath"
+   ],
+   "set": {
+    "vegetation.grass": 0.6
+   },
+   "tint": "groundTint"
+  },
+  {
+   "keys": [
+    "bush",
+    "shrub",
+    "scrub",
+    "brush"
+   ],
+   "set": {
+    "vegetation.grass": 0.5
+   }
+  },
+  {
+   "keys": [
+    "flower",
+    "bloom",
+    "blossom",
+    "wildflower",
+    "poppy",
+    "daisy",
+    "tulip"
+   ],
+   "set": {
+    "vegetation.flowers": 0.6
+   }
+  },
+  {
+   "keys": [
+    "cactus",
+    "cacti",
+    "saguaro",
+    "succulent"
+   ],
+   "set": {
+    "vegetation.cactus": 0.6
+   },
+   "single": {
+    "vegetation.cactus": 0.25
+   }
+  },
+  {
+   "keys": [
+    "dead tree",
+    "bare tree",
+    "withered tree",
+    "leafless tree",
+    "dead forest"
+   ],
+   "set": {
+    "vegetation.deadTrees": 0.7
+   }
+  },
+  {
+   "keys": [
+    "cabin",
+    "hut",
+    "cottage",
+    "shack",
+    "lodge",
+    "log cabin",
+    "chalet"
+   ],
+   "set": {
+    "objects+": [
+     "cabin"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "house",
+    "home",
+    "farmhouse",
+    "farm",
+    "barn",
+    "manor"
+   ],
+   "set": {
+    "objects+": [
+     "house"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "village",
+    "town",
+    "hamlet",
+    "city",
+    "settlement",
+    "houses"
+   ],
+   "set": {
+    "objects+": [
+     "village"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "boat",
+    "ship",
+    "sailboat",
+    "canoe",
+    "kayak",
+    "raft",
+    "rowboat",
+    "fishing boat",
+    "ferry",
+    "yacht",
+    "sailing ship",
+    "vessel",
+    "dhow"
+   ],
+   "set": {
+    "objects+": [
+     "boat"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "road",
+    "path",
+    "trail",
+    "track",
+    "street",
+    "highway",
+    "lane",
+    "pathway"
+   ],
+   "set": {
+    "objects+": [
+     "road"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "bridge",
+    "footbridge",
+    "viaduct"
+   ],
+   "set": {
+    "objects+": [
+     "bridge"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "lighthouse",
+    "beacon",
+    "light house"
+   ],
+   "set": {
+    "objects+": [
+     "lighthouse"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "tent",
+    "camp",
+    "campsite",
+    "yurt",
+    "bedouin tent",
+    "desert tent",
+    "teepee",
+    "tipi"
+   ],
+   "set": {
+    "objects+": [
+     "tent"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "campfire",
+    "bonfire",
+    "fire",
+    "fireplace",
+    "camp fire"
+   ],
+   "set": {
+    "objects+": [
+     "campfire"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "windmill",
+    "wind turbine",
+    "turbine",
+    "mill",
+    "watermill"
+   ],
+   "set": {
+    "objects+": [
+     "windmill"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "bird",
+    "seagull",
+    "gull",
+    "eagle",
+    "hawk",
+    "crow",
+    "raven",
+    "flock",
+    "swallow",
+    "goose",
+    "geese",
+    "duck",
+    "pelican"
+   ],
+   "set": {
+    "objects+": [
+     "birds"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "castle",
+    "fortress",
+    "fort",
+    "citadel",
+    "palace",
+    "tower",
+    "watchtower"
+   ],
+   "set": {
+    "objects+": [
+     "castle"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "casbah",
+    "kasbah",
+    "medina",
+    "ksar",
+    "souk"
+   ],
+   "set": {
+    "objects+": [
+     "casbah"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "mosque",
+    "minaret"
+   ],
+   "set": {
+    "objects+": [
+     "mosque"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "camel",
+    "dromedary",
+    "caravan"
+   ],
+   "set": {
+    "objects+": [
+     "camel"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "igloo",
+    "ice house"
+   ],
+   "set": {
+    "objects+": [
+     "igloo"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "pyramid",
+    "ziggurat"
+   ],
+   "set": {
+    "objects+": [
+     "pyramid"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "ruin",
+    "ruins",
+    "temple",
+    "ancient ruins",
+    "pillar"
+   ],
+   "set": {
+    "objects+": [
+     "ruins"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "sled",
+    "sledge",
+    "sleigh",
+    "dog sled"
+   ],
+   "set": {
+    "objects+": [
+     "sled"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "penguin"
+   ],
+   "set": {
+    "objects+": [
+     "penguins"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "whale",
+    "dolphin",
+    "orca"
+   ],
+   "set": {
+    "objects+": [
+     "whale"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "lit window",
+    "glowing window",
+    "warm light",
+    "lights on",
+    "lit up",
+    "lamp",
+    "lantern",
+    "lamplight",
+    "window light",
+    "illuminated",
+    "candlelight"
+   ],
+   "set": {
+    "details.litWindows": true
+   }
+  },
+  {
+   "keys": [
+    "smoke",
+    "chimney smoke",
+    "chimney",
+    "smoking chimney",
+    "steam"
+   ],
+   "set": {
+    "details.smoke": true
+   }
+  },
+  {
+   "keys": [
+    "reflection",
+    "reflect",
+    "reflected",
+    "reflective",
+    "mirror",
+    "mirrored",
+    "mirror like",
+    "glassy"
+   ],
+   "set": {
+    "details.reflection": true
+   }
+  },
+  {
+   "keys": [
+    "cozy",
+    "cosy",
+    "snug",
+    "homely",
+    "comfy",
+    "peaceful",
+    "serene",
+    "quiet",
+    "tranquil"
+   ],
+   "set": {
+    "mood.cozy": 0.7
+   }
+  },
+  {
+   "keys": [
+    "lonely",
+    "alone",
+    "isolated",
+    "solitude",
+    "remote",
+    "deserted",
+    "empty",
+    "abandoned",
+    "desolate"
+   ],
+   "set": {
+    "mood.lonely": 0.8
+   }
+  },
+  {
+   "keys": [
+    "grand",
+    "epic",
+    "majestic",
+    "vast",
+    "immense",
+    "dramatic",
+    "monumental",
+    "magnificent",
+    "breathtaking"
+   ],
+   "set": {
+    "mood.grand": 0.8
+   }
+  },
+  {
+   "keys": [
+    "spooky",
+    "eerie",
+    "creepy",
+    "scary",
+    "ominous",
+    "gloomy",
+    "haunting",
+    "sinister",
+    "ghostly"
+   ],
+   "set": {
+    "mood.spooky": 0.8
+   }
+  },
+  {
+   "keys": [
+    "cold",
+    "chilly",
+    "icy",
+    "freezing",
+    "frosty",
+    "frost",
+    "chill"
+   ],
+   "set": {
+    "palette.skyTint": "#a9c6e0",
+    "palette.groundTint": "#dfe8f0",
+    "palette.waterTint": "#9fc3dc",
+    "surface.snowCover": 0.3
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "frozen"
+   ],
+   "set": {
+    "surface.snowCover": 0.5,
+    "palette.waterTint": "#cfe6f1",
+    "palette.groundTint": "#e6eef5"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "warm",
+    "hot",
+    "scorching",
+    "blazing",
+    "burning"
+   ],
+   "set": {
+    "palette.skyTint": "#f4b072",
+    "palette.groundTint": "#d9a557",
+    "celestial.sun": true
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "winter",
+    "wintry"
+   ],
+   "set": {
+    "surface.snowCover": 0.7,
+    "weather.snow": 0.3,
+    "palette.skyTint": "#b7c9dc"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "summer",
+    "summery"
+   ],
+   "set": {
+    "celestial.sun": true,
+    "vegetation.grass": 0.5
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "spring",
+    "springtime"
+   ],
+   "set": {
+    "vegetation.flowers": 0.5,
+    "vegetation.grass": 0.6
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "autumn",
+    "autumnal",
+    "fall colors",
+    "fall colours"
+   ],
+   "set": {
+    "palette.foliageTint": "#d9822b",
+    "vegetation.forest": 0.5
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "lush",
+    "verdant",
+    "green land"
+   ],
+   "set": {
+    "vegetation.grass": 0.7,
+    "vegetation.forest": 0.5
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "sahara",
+    "saharan"
+   ],
+   "set": {
+    "terrain+": [
+     "dunes"
+    ],
+    "celestial.sun": true,
+    "weather.clouds": 0.05,
+    "palette.groundTint": "#e0b062"
+   },
+   "soft": true,
+   "maybe": [
+    "vegetation.palm",
+    "objects.camel"
+   ]
+  },
+  {
+   "keys": [
+    "desert",
+    "arid"
+   ],
+   "set": {
+    "terrain+": [
+     "dunes"
+    ],
+    "celestial.sun": true,
+    "palette.groundTint": "#dcae64"
+   },
+   "soft": true,
+   "maybe": [
+    "vegetation.cactus",
+    "objects.camel"
+   ]
+  },
+  {
+   "keys": [
+    "badlands"
+   ],
+   "set": {
+    "terrain+": [
+     "canyon",
+     "mesa"
+    ],
+    "celestial.sun": true,
+    "palette.groundTint": "#c1623a"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "arctic",
+    "polar",
+    "north pole"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains",
+     "glacier"
+    ],
+    "surface.snowCover": 0.9,
+    "palette.skyTint": "#bcd6ea",
+    "palette.groundTint": "#eef3f7",
+    "palette.waterTint": "#9fc3dc"
+   },
+   "soft": true,
+   "maybe": [
+    "celestial.aurora",
+    "objects.igloo"
+   ]
+  },
+  {
+   "keys": [
+    "antarctic",
+    "antarctica",
+    "south pole"
+   ],
+   "set": {
+    "terrain+": [
+     "glacier",
+     "iceberg",
+     "sea"
+    ],
+    "surface.snowCover": 0.9,
+    "palette.skyTint": "#bcd6ea",
+    "palette.groundTint": "#eef3f7"
+   },
+   "soft": true,
+   "maybe": [
+    "objects.penguins"
+   ]
+  },
+  {
+   "keys": [
+    "tropical",
+    "tropics"
+   ],
+   "set": {
+    "vegetation.palm": 0.8,
+    "terrain+": [
+     "sea",
+     "beach"
+    ],
+    "celestial.sun": true,
+    "palette.groundTint": "#e8c98a",
+    "palette.waterTint": "#3fb7c4"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "jungle",
+    "rainforest"
+   ],
+   "set": {
+    "vegetation.forest": 0.9,
+    "vegetation.palm": 0.4,
+    "weather.fog": 0.3,
+    "terrain+": [
+     "river"
+    ]
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "haunted",
+    "cursed",
+    "graveyard",
+    "cemetery"
+   ],
+   "set": {
+    "time": "night",
+    "weather.fog": 0.7,
+    "vegetation.deadTrees": 0.8,
+    "mood.spooky": 0.9,
+    "celestial.moon": "full"
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "alpine",
+    "alps",
+    "swiss",
+    "himalaya",
+    "himalayas"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains"
+    ],
+    "vegetation.pine": 0.6,
+    "surface.snowCover": 0.5
+   },
+   "soft": true,
+   "maybe": [
+    "objects.cabin"
+   ]
+  },
+  {
+   "keys": [
+    "oasis"
+   ],
+   "set": {
+    "terrain+": [
+     "dunes",
+     "lake"
+    ],
+    "vegetation.palm": 0.7,
+    "celestial.sun": true
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "coast",
+    "coastal",
+    "coastline"
+   ],
+   "set": {
+    "terrain+": [
+     "sea",
+     "cliffs"
+    ]
+   },
+   "soft": true,
+   "maybe": [
+    "objects.lighthouse"
+   ]
+  },
+  {
+   "keys": [
+    "seaside"
+   ],
+   "set": {
+    "terrain+": [
+     "sea",
+     "beach"
+    ]
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "fjord",
+    "fiord"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains",
+     "sea",
+     "cliffs"
+    ],
+    "vegetation.pine": 0.5,
+    "weather.fog": 0.2
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "highland",
+    "highlands",
+    "moor",
+    "moorland"
+   ],
+   "set": {
+    "terrain+": [
+     "hills",
+     "mountains"
+    ],
+    "vegetation.grass": 0.5,
+    "weather.fog": 0.3
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "countryside",
+    "farmland",
+    "pastoral",
+    "rural"
+   ],
+   "set": {
+    "terrain+": [
+     "hills"
+    ],
+    "vegetation.grass": 0.6,
+    "vegetation.flowers": 0.3
+   },
+   "soft": true,
+   "maybe": [
+    "objects.windmill",
+    "objects.house",
+    "objects.road"
+   ]
+  },
+  {
+   "keys": [
+    "mediterranean",
+    "riviera"
+   ],
+   "set": {
+    "terrain+": [
+     "sea",
+     "cliffs"
+    ],
+    "celestial.sun": true
+   },
+   "soft": true,
+   "maybe": [
+    "objects.village",
+    "objects.boat"
+   ]
+  },
+  {
+   "keys": [
+    "atlas",
+    "atlas mountains"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains"
+    ],
+    "vegetation.pine": 0.3
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "hoggar",
+    "ahaggar",
+    "tassili"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains",
+     "dunes",
+     "mesa"
+    ],
+    "celestial.sun": true
+   },
+   "soft": true
+  },
+  {
+   "keys": [
+    "kabylie"
+   ],
+   "set": {
+    "terrain+": [
+     "mountains",
+     "hills"
+    ],
+    "vegetation.forest": 0.5
+   },
+   "soft": true
+  }
+ ]
+}
