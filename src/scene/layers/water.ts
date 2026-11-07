@@ -91,7 +91,7 @@ export function waterLayers(r: Resolved, pal: Pal, seed: number, geo: WaterGeo):
       defs: `<linearGradient id="lake-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${mix(top, bottom, 0.8)}"/></linearGradient>`,
       paths: [
         { d: smoothClosed(bank), fill: shade(pal.lit(pal.land(r.surface === 'snow' ? 'snow' : 'grass'), 0.05), 0.82) },
-        { d: smoothClosed(l.pts), fill: 'url(#lake-grad)' },
+        { d: smoothClosed(l.pts), fill: 'url(#lake-grad)', ink: shade(bottom, 0.7) },
         ...ripples(geo, r, pal, seed), ...glitter(geo, r, seed),
       ],
     })

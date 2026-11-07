@@ -30,17 +30,19 @@ export function circlePath(cx: number, cy: number, r: number): string {
 
 export type Profile = ((x: number) => number) & { peakX?: number }
 export const STEP = 8
+/** Ridges and ground run this far past both edges so parallax never shows a seam. */
+export const EDGE = 64
 
 export function samples(profile: Profile, step = STEP): Pt[] {
   const out: Pt[] = []
-  for (let x = 0; x <= VIEW.w + step; x += step) out.push([x, profile(x)])
+  for (let x = -EDGE; x <= VIEW.w + EDGE; x += step) out.push([x, profile(x)])
   return out
 }
 
 /** Filled polygon under a profile, down to `bottom`. */
-export function areaBelow(profile: Profile, bottom: number = VIEW.h): string {
+export function areaBelow(profile: Profile, bottom: number = VIEW.h + 40): string {
   const pts = samples(profile)
-  return polyline(pts) + `L${VIEW.w + STEP} ${bottom}L0 ${bottom}Z`
+  return polyline(pts) + `L${VIEW.w + EDGE} ${bottom}L${-EDGE} ${bottom}Z`
 }
 
 export interface WaterGeo {

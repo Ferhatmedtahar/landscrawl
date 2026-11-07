@@ -46,7 +46,7 @@ export function weatherLayers(r: Resolved, pal: Pal, seed: number): Layer[] {
     const col = mix(pal.sky[2], '#ffffff', 0.55)
     layers.push({
       id: 'rain', depth: 0.9,
-      paths: classes.map((d, k) => ({ d, stroke: col, strokeWidth: [1, 1.5, 2.2][k] as number, opacity: [0.3, 0.42, 0.55][k] as number })),
+      paths: classes.map((d, k) => ({ d, stroke: col, strokeWidth: [1, 1.5, 2.2][k] as number, opacity: [0.3, 0.42, 0.55][k] as number, still: true })),
     })
   }
 
@@ -60,7 +60,7 @@ export function weatherLayers(r: Resolved, pal: Pal, seed: number): Layer[] {
     }
     layers.push({
       id: 'snow', depth: 0.9,
-      paths: classes.map((d, k) => ({ d, fill: '#ffffff', opacity: [0.55, 0.75, 0.95][k] as number })),
+      paths: classes.map((d, k) => ({ d, fill: '#ffffff', opacity: [0.55, 0.75, 0.95][k] as number, still: true })),
     })
   }
 

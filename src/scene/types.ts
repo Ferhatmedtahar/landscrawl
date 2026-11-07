@@ -78,6 +78,14 @@ export interface PathSpec {
   stroke?: string
   strokeWidth?: number
   opacity?: number
+  /** Skip jitter and outline (stars, rain, snowflakes). */
+  still?: boolean
+  /** Force (true) or forbid (false) the double-line outline. Default: opaque hex fills get one. */
+  outline?: boolean
+  /** Outline colour; needed for gradient fills, which cannot derive one. */
+  ink?: string
+  /** Also fill with diagonal hatch lines (shadow sides). */
+  hatch?: boolean
 }
 export interface Layer {
   id: string

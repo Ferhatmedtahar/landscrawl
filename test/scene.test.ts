@@ -22,7 +22,7 @@ const SEEDS = [1, 42, 99999, 4294967295]
 describe('scene building', () => {
   it('never produces NaN, undefined or Infinity', () => {
     for (const t of SENTENCES) for (const s of SEEDS) {
-      const svg = renderSvg(buildScene(parse(t), s))
+      const svg = renderSvg(buildScene(parse(t), s), { draw: { seed: s, variant: 1, amp: 2, sketch: true } })
       expect(svg, `${t} / ${s}`).not.toMatch(/NaN|undefined|Infinity|\[object/)
     }
   })

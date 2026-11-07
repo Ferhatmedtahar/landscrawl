@@ -31,7 +31,7 @@ export function cloudsLayer(r: Resolved, pal: Pal, seed: number): Layer {
       const h = 40 + rng() * 40 + c * 30
       const d = cloudPath(cx, cy, w, h, rng)
       paths.push({ d, fill: pal.cloud.shade, opacity: 0.55 })
-      paths.push({ d: cloudPath(cx, cy - 5, w * 0.96, h, mulberry32(subSeed(seed, `cloud-${i}`))), fill: pal.cloud.body, opacity: 0.55 + 0.4 * Math.min(1, c * 1.3) })
+      paths.push({ d: cloudPath(cx, cy - 5, w * 0.96, h, mulberry32(subSeed(seed, `cloud-${i}`))), fill: pal.cloud.body, opacity: 0.55 + 0.4 * Math.min(1, c * 1.3), outline: true })
     }
     if (c > 0.7) {
       // heavy overcast: a low grey sheet across the top

@@ -1,5 +1,5 @@
 import { mulberry32, subSeed } from '../../render/prng'
-import { areaBelow, circlePath, f1, HORIZON, polyline, STEP, type Profile, type Pt } from '../geometry'
+import { areaBelow, circlePath, EDGE, f1, HORIZON, polyline, STEP, type Profile, type Pt } from '../geometry'
 import { mix, shade } from '../color'
 import type { LandKind, Pal } from '../palette'
 import { makeProfile, shadowFacets, snowCaps, type ProfileKind } from '../profiles'
@@ -35,13 +35,13 @@ function bands(profile: Profile, base: number, amp: number, colors: string[]): P
     const yA = levels[i] as number, yB = (levels[i + 1] ?? base + 14) as number
     const top: Pt[] = []
     let any = false
-    for (let x = 0; x <= VIEW.w + STEP; x += STEP) {
+    for (let x = -EDGE; x <= VIEW.w + EDGE; x += STEP) {
       const y = Math.min(yB, Math.max(yA, profile(x)))
       if (profile(x) < yB) any = true
       top.push([x, y])
     }
     if (!any) continue
-    out.push({ d: polyline(top) + `L${VIEW.w + STEP} ${f1(yB)}L0 ${f1(yB)}Z`, fill: colors[i % colors.length] as string, opacity: 0.55 })
+    out.push({ d: polyline(top) + `L${VIEW.w + EDGE} ${f1(yB)}L${-EDGE} ${f1(yB)}Z`, fill: colors[i % colors.length] as string, opacity: 0.55 })
   }
   return out
 }
@@ -55,14 +55,14 @@ function rowLayer(id: string, row: Row, r: Resolved, pal: Pal, seed: number): La
   if (row.kind === 'mountains' || row.kind === 'glacier' || row.kind === 'volcano') {
     const cover = row.kind === 'glacier' ? Math.max(r.snowCover, 0.55) : r.snowCover
     const dark = shade(body, 0.78)
-    for (const d of shadowFacets(profile, row.amp * 0.16)) paths.push({ d, fill: dark, opacity: 0.5 })
+    for (const d of shadowFacets(profile, row.amp * 0.16)) paths.push({ d, fill: dark, opacity: 0.5, hatch: row.haze < 0.6 })
     if (cover > 0.05 && row.kind !== 'volcano') {
       const line = row.base - row.amp * (0.85 - 0.6 * cover)
       const snow = pal.lit('#f4f8fb', row.haze * 0.7)
       for (const d of snowCaps(profile, line, row.amp * 0.38, subSeed(seed, id))) paths.push({ d, fill: snow })
     }
   } else if (row.kind === 'dunes') {
-    for (const d of shadowFacets(profile, row.amp * 0.12, 0.9)) paths.push({ d, fill: shade(body, 0.8), opacity: 0.5 })
+    for (const d of shadowFacets(profile, row.amp * 0.12, 0.9)) paths.push({ d, fill: shade(body, 0.8), opacity: 0.5, hatch: true })
   } else if (row.kind === 'mesa') {
     const light = mix(body, '#e9b985', 0.45), deep = shade(body, 0.72)
     paths.push(...bands(profile, row.base, row.amp, [light, body, deep, mix(body, '#8a3d2a', 0.4)]))

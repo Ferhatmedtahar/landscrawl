@@ -1,5 +1,5 @@
 import { mulberry32, subSeed } from '../../render/prng'
-import { areaBelow, f1, HORIZON, polyline, STEP, type Pt, type WaterGeo } from '../geometry'
+import { areaBelow, EDGE, f1, HORIZON, polyline, STEP, type Pt, type WaterGeo } from '../geometry'
 import { mix, shade } from '../color'
 import type { LandKind, Pal } from '../palette'
 import { makeProfile, shadowFacets } from '../profiles'
@@ -13,7 +13,7 @@ export function groundMid(r: Resolved, pal: Pal, seed: number): Layer {
   const sand = r.surface === 'sand'
   const profile = makeProfile(sand ? 'dunes' : 'hills', subSeed(seed, 'ground-mid'), sand ? 690 : 618, sand ? 100 : r.surface === 'snow' ? 18 : 34)
   const color = pal.lit(pal.land(landFor(r)), 0.1)
-  const paths: PathSpec[] = [{ d: areaBelow(profile), fill: 'url(#ground-grad)' }]
+  const paths: PathSpec[] = [{ d: areaBelow(profile), fill: 'url(#ground-grad)', ink: shade(color, 0.62) }]
   if (sand) for (const d of shadowFacets(profile, 12, 0.9)) paths.push({ d, fill: shade(color, 0.78), opacity: 0.65 })
   const defs = `<linearGradient id="ground-grad" gradientUnits="userSpaceOnUse" x1="0" y1="560" x2="0" y2="900"><stop offset="0" stop-color="${mix(color, pal.sky[2], 0.3)}"/><stop offset="0.45" stop-color="${color}"/><stop offset="1" stop-color="${shade(color, 0.78)}"/></linearGradient>`
   return { id: 'ground-mid', depth: 0.55, defs, paths }
@@ -33,7 +33,7 @@ export function groundNear(r: Resolved, pal: Pal, seed: number, water: WaterGeo)
   if (sand) for (const d of shadowFacets(shore, 10, 0.9)) paths.push({ d, fill: shade(color, 0.84), opacity: 0.5 })
   if (water.sea) {
     const pts: Pt[] = []
-    for (let x = 0; x <= VIEW.w + STEP; x += STEP) pts.push([x, shore(x) - 5])
+    for (let x = -EDGE; x <= VIEW.w + EDGE; x += STEP) pts.push([x, shore(x) - 5])
     paths.push({ d: polyline(pts), stroke: '#ffffff', strokeWidth: 3.5, opacity: 0.55 })
   }
 

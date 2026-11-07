@@ -42,9 +42,9 @@ function starPaths(r: Resolved, seed: number): PathSpec[] {
     if (k === 2) classes[2] += `M${f1(x - 7)} ${f1(y)}H${f1(x + 7)}M${f1(x)} ${f1(y - 7)}V${f1(y + 7)}`
   }
   const out: PathSpec[] = []
-  if (classes[0]) out.push({ d: classes[0], fill: '#ffffff', opacity: 0.55 * dim })
-  if (classes[1]) out.push({ d: classes[1], fill: '#fff8e0', opacity: 0.8 * dim })
-  if (classes[2]) out.push({ d: classes[2], fill: '#fffdf0', stroke: '#fffdf0', strokeWidth: 1.2, opacity: 0.95 * dim })
+  if (classes[0]) out.push({ d: classes[0], fill: '#ffffff', opacity: 0.55 * dim, still: true })
+  if (classes[1]) out.push({ d: classes[1], fill: '#fff8e0', opacity: 0.8 * dim, still: true })
+  if (classes[2]) out.push({ d: classes[2], fill: '#fffdf0', stroke: '#fffdf0', strokeWidth: 1.2, opacity: 0.95 * dim, still: true })
   return out
 }
 
@@ -80,7 +80,7 @@ export function celestialLayer(r: Resolved, pal: Pal): Layer {
     const gr = r.time === 'day' ? 280 : 520
     paths.push({ d: circlePath(sun.x, sun.y, gr), fill: 'url(#sun-glow)', opacity: dim })
   }
-  if (r.sun) paths.push({ d: circlePath(sun.x, sun.y, r.time === 'day' ? 44 : 58), fill: '#fff4c8', opacity: dim })
+  if (r.sun) paths.push({ d: circlePath(sun.x, sun.y, r.time === 'day' ? 44 : 58), fill: '#fff4c8', opacity: dim, outline: false })
 
   if (r.moon !== 'none') {
     defs += `<radialGradient id="moon-glow"><stop offset="0" stop-color="#dfe6ff" stop-opacity="0.45"/><stop offset="1" stop-color="#dfe6ff" stop-opacity="0"/></radialGradient>`
