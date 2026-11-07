@@ -1,14 +1,30 @@
+import { parse } from './parser/parse'
 import { renderSvg } from './render/svgRenderer'
 import { buildScene } from './scene/buildScene'
-import { emptyScene } from './scene/types'
 
-function seedFromHash(): number {
-  const m = /[#&]s=(\d+)/.exec(location.hash)
-  return m ? Number(m[1]) >>> 0 : (crypto.getRandomValues(new Uint32Array(1))[0] as number)
+function fromHash(): { text: string; seed: number } {
+  const p = new URLSearchParams(location.hash.slice(1))
+  const s = p.get('s')
+  return {
+    text: p.get('t') ?? 'sunset over snowy mountains, a small cabin with a lit window, pine forest',
+    seed: s !== null && /^\d+$/.test(s) ? Number(s) >>> 0 : (crypto.getRandomValues(new Uint32Array(1))[0] as number),
+  }
 }
 
-const stage = document.getElementById('stage')
-if (stage) {
-  const state = { ...emptyScene(), time: 'sunset' as const }
-  stage.innerHTML = renderSvg(buildScene(state, seedFromHash()))
+const stage = document.getElementById('stage') as HTMLElement
+const input = document.getElementById('text') as HTMLTextAreaElement
+const unknown = document.getElementById('unknown') as HTMLElement
+const init = fromHash()
+input.value = init.text
+
+function draw(): void {
+  const state = parse(input.value)
+  stage.innerHTML = renderSvg(buildScene(state, init.seed))
+  const bits: string[] = []
+  if (state.unknownWords.length) bits.push(`I didn't know: ${state.unknownWords.join(', ')}`)
+  if (state.unusedWords.length) bits.push(`Not used: ${state.unusedWords.join(', ')}`)
+  unknown.textContent = bits.join(' · ')
 }
+
+input.addEventListener('input', draw)
+draw()

@@ -85,6 +85,8 @@ export interface Layer {
   depth: number
   defs?: string
   paths: PathSpec[]
+  /** Extra raw SVG markup drawn after the paths (used by the paper texture). */
+  raw?: string
 }
 
 export const VIEW = { w: 1600, h: 900 } as const

@@ -11,13 +11,18 @@
     main { width: min(960px, 94vw); display: grid; gap: 12px; }
     #stage { width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; }
     #stage svg { display: block; width: 100%; height: 100%; }
+    textarea { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #333; background: #1c1f25; color: inherit; font: inherit; resize: vertical; }
+    .sr { position: absolute; left: -9999px; }
     p { margin: 0; opacity: .7; font-size: .9rem; }
   </style>
 </head>
 <body>
   <main>
     <div id="stage" role="img" aria-label="A hand-drawn landscape"></div>
-    <p>Landscrawl · M1 preview: sky and one mountain layer. Add <code>#s=123</code> to the URL to change the seed.</p>
+    <label for="text" class="sr">Describe a landscape</label>
+    <textarea id="text" rows="2" spellcheck="false"></textarea>
+    <p id="unknown" aria-live="polite"></p>
+    <p>Landscrawl · M3 preview. Seed: add <code>#s=123</code>. Text: <code>#t=foggy lake at dawn</code>.</p>
   </main>
   <script type="module" src="/src/main.ts"></script>
 </body>
