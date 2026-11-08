@@ -44,5 +44,5 @@ No accounts, backend, database, analytics, or AI/image-generation calls. No phot
 
 ## UI notes
 
-- Styles are in `src/ui/style.css` (linked from `index.html`, inlined at build with the Bricolage Grotesque font, SIL OFL, in `src/ui/fonts/`). The look follows the earlier Describble site: night background, paper-coloured pill buttons, underlined text box, art with a ring and a glow tinted by the sky colour.
+- Styles are in `src/ui/style.css` (linked from `index.html`, inlined at build with the Bricolage Grotesque font, SIL OFL, in `src/ui/fonts/`). The look follows the earlier Describble site: night background, paper-coloured pill buttons, underlined text box, large art with a thin ring (no glow).
 - The strict CSP is added only in the production build (`vite.config.ts`); in dev it would block Vite's module script.

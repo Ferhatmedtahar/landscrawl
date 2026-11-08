@@ -3,7 +3,6 @@ import { parseDetailed } from '../parser/parse'
 import { Stage } from '../render/stage'
 import { RATIOS, type Ratio } from '../render/svgRenderer'
 import { buildScene } from '../scene/buildScene'
-import { makePalette } from '../scene/palette'
 import { resolveScene } from '../scene/resolve'
 import { describeScene } from './describe'
 import { downloadPng, downloadSvg } from './export'
@@ -82,7 +81,6 @@ export function startApp(): void {
     stage.setScene(buildScene(parsed.state, st.seed), st.seed)
     label = describeScene(resolveScene(parsed.state, st.seed))
     stage.setLabel(label)
-    document.documentElement.style.setProperty('--accent', makePalette(resolveScene(parsed.state, st.seed)).sky[1])
 
     chipsEl.replaceChildren(
       ...(parsed.chips.length === 0

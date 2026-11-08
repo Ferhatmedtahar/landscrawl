@@ -6,10 +6,9 @@
 :root {
   --night: #0f1118; --paper: #f6efe1; --ink: #1b1b1f;
   --text: #f6efe1; --muted: rgba(246, 239, 225, .72); --faint: rgba(246, 239, 225, .58); --rule: rgba(246, 239, 225, .16);
-  --accent: #e8c15a;
   --font: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
   --display: "Bricolage Grotesque", var(--font);
-  --wide: 1180px; --gutter: clamp(16px, 4vw, 40px);
+  --wide: 1680px; --gutter: clamp(16px, 4vw, 40px);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -41,13 +40,13 @@ header { position: absolute; inset: 0 0 auto; z-index: 2; display: flex; align-i
 h1 { margin: 0; font-family: var(--display); font-size: clamp(1.9rem, 4.4vw, 3.7rem); line-height: 1.04; letter-spacing: -.025em; font-weight: 750; overflow-wrap: break-word; min-width: 0; }
 .lede { margin: 14px 0 0; max-width: 30em; color: var(--muted); font-size: 1.1rem; }
 
-#stage { --ratio: 1.7778; width: min(100%, calc(70svh * var(--ratio))); aspect-ratio: var(--ratio); display: block; cursor: grab; touch-action: pan-y;
+#stage { --ratio: 1.7778; width: 100%; max-width: calc(130svh * var(--ratio)); aspect-ratio: var(--ratio); display: block; cursor: grab; touch-action: pan-y;
   border-radius: 22px; overflow: hidden; background: #0b0c10; user-select: none;
-  box-shadow: 0 0 0 2px var(--rule), 0 30px 90px -30px rgba(0, 0, 0, .9), 0 0 140px -50px var(--accent); transition: box-shadow .8s, width .3s; }
+  box-shadow: 0 0 0 2px var(--rule); transition: width .3s; }
 #stage:active { cursor: grabbing; }
 #stage svg { display: block; width: 100%; height: 100%; }
 
-#text { width: 100%; min-height: 3.2em; max-height: 9em; resize: none; font: inherit; font-size: 21px; line-height: 1.35; padding: 8px 0; border: 0;
+#text { width: 100%; min-height: 4em; max-height: 12em; field-sizing: content; resize: none; font: inherit; font-size: 21px; line-height: 1.35; padding: 8px 0; border: 0;
   border-bottom: 1px solid var(--rule); background: transparent; color: var(--text); caret-color: var(--text); outline: none; }
 #text::placeholder { color: var(--faint); }
 #text:focus { border-bottom-color: var(--muted); }
@@ -94,7 +93,7 @@ noscript p { color: var(--muted); padding: 24px var(--gutter); }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 @media (min-width: 900px) {
-  #hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); grid-template-areas: "intro drawing" "composer drawing"; align-content: center; }
+  #hero { grid-template-columns: minmax(320px, 0.8fr) minmax(0, 2.2fr); grid-template-areas: "intro drawing" "composer drawing"; align-content: center; }
   .intro { align-self: end; }
   .composer { align-self: start; }
 }
