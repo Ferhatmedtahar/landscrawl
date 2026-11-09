@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { drawLayer, inkOf, type DrawOptions } from '../src/render/draw'
 import { flatten, jitterPolys, polysToD } from '../src/render/jitter'
-import { AMP_ACTIVE, AMP_SETTLED, SETTLE_MS, VARIANTS, ampFor, diffLayers, nextVariant, parallax } from '../src/render/motion'
+import { AMP_ACTIVE, AMP_SETTLED, SETTLE_MS, VARIANTS, ampFor, diffLayers, freshPaths, nextVariant, parallax } from '../src/render/motion'
 import { cropFor, renderSvg } from '../src/render/svgRenderer'
 import { parse } from '../src/parser/parse'
 import { buildScene } from '../src/scene/buildScene'
@@ -126,5 +126,17 @@ describe('motion helpers', () => {
     expect(cropFor('16:9')).toEqual({ x: 0, y: 0, w: VIEW.w, h: VIEW.h })
     const sq = cropFor('1:1'); expect(sq.w).toBe(VIEW.h); expect(sq.x).toBe((VIEW.w - VIEW.h) / 2)
     expect(cropFor('9:16').w / cropFor('9:16').h).toBeCloseTo(9 / 16)
+  })
+})
+
+describe('freshPaths (per-path draw-in)', () => {
+  it('flags only paths whose geometry was not in the layer before', () => {
+    expect(freshPaths(new Set(['a', 'b']), ['a', 'b', 'c', 'd'])).toEqual([2, 3])
+  })
+  it('flags nothing when every path was already there', () => {
+    expect(freshPaths(new Set(['a', 'b']), ['b', 'a'])).toEqual([])
+  })
+  it('flags every path when the layer has no previous keys', () => {
+    expect(freshPaths(new Set(), ['a', 'b'])).toEqual([0, 1])
   })
 })

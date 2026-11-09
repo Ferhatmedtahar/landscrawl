@@ -13,6 +13,8 @@ export interface DrawItem {
   stroke?: string
   strokeWidth?: number
   opacity?: number
+  /** Index of the layer path this item was made from (fill, hatch and ink items share it). */
+  src: number
 }
 
 export interface DrawOptions {
@@ -57,12 +59,12 @@ export function drawLayer(layer: Layer, o: DrawOptions): DrawItem[] {
     const wobble = o.amp > 0 && !p.still && (!isGradient(p.fill) || ink !== undefined || p.stroke !== undefined)
     const d = wobble ? polysToD(jitterPolys(polysOf(p), base, o.amp)) : p.d
     const filled = p.fill !== undefined && p.fill !== 'none'
-    items.push({ kind: filled ? 'fill' : 'stroke', d, fill: p.fill ?? 'none', stroke: p.stroke, strokeWidth: p.strokeWidth, opacity: p.opacity })
-    if (o.sketch && p.hatch) items.push({ kind: 'hatch', d, fill: 'url(#hatch)', opacity: 0.55 })
+    items.push({ kind: filled ? 'fill' : 'stroke', d, fill: p.fill ?? 'none', stroke: p.stroke, strokeWidth: p.strokeWidth, opacity: p.opacity, src: i })
+    if (o.sketch && p.hatch) items.push({ kind: 'hatch', d, fill: 'url(#hatch)', opacity: 0.55, src: i })
     if (ink) {
       for (let k = 0; k < 2; k++) {
         const dd = o.amp > 0 ? polysToD(jitterPolys(polysOf(p), subSeed(base, `ink${k}`), o.amp * (k === 0 ? 0.9 : 1.3))) : p.d
-        items.push({ kind: 'ink', d: dd, fill: 'none', stroke: ink, strokeWidth: k === 0 ? 1.7 : 1.1, opacity: k === 0 ? 0.62 : 0.4 })
+        items.push({ kind: 'ink', d: dd, fill: 'none', stroke: ink, strokeWidth: k === 0 ? 1.7 : 1.1, opacity: k === 0 ? 0.62 : 0.4, src: i })
       }
     }
   })

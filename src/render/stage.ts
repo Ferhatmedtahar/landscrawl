@@ -1,5 +1,5 @@
 import { drawLayer, HATCH_DEF, type DrawItem } from './draw'
-import { AMP_ACTIVE, AMP_SETTLED, BOIL_MS, DRAW_IN_MS, FADE_OUT_MS, SETTLE_MS, VARIANTS, diffLayers, nextVariant, parallax } from './motion'
+import { AMP_ACTIVE, AMP_SETTLED, BOIL_MS, DRAW_IN_MS, FADE_OUT_MS, FILL_DELAY_MS, SETTLE_MS, VARIANTS, diffLayers, freshPaths, nextVariant, parallax } from './motion'
 import { renderSvg, type Ratio } from './svgRenderer'
 import { VIEW, type Layer } from '../scene/types'
 
@@ -11,6 +11,9 @@ interface LayerView {
   paths: SVGPathElement[]
   /** variants[v][itemIndex] = d string, filled in lazily. */
   variants: (string[] | undefined)[]
+  /** Layer path index of each painted item, and the geometry keys seen last time (to spot new paths). */
+  src: number[]
+  keys: Set<string>
 }
 
 /** Owns the live <svg>: draws layers, boils the lines, settles after typing, animates additions and removals. */
@@ -63,8 +66,12 @@ export class Stage {
     for (const id of diff.removed) this.removeLayer(id)
     for (const layer of layers) {
       const existing = this.views.get(layer.id)
-      this.draw(layer, existing)
-      if (!existing && !this.reduced && this.order.length > 0) this.drawIn(this.views.get(layer.id) as LayerView)
+      const fresh = this.draw(layer, existing)
+      if (this.reduced || this.order.length === 0) continue
+      const view = this.views.get(layer.id) as LayerView
+      // a new layer draws in whole; in an existing layer only the paths that were not there before do
+      if (!existing) this.drawIn(view.paths)
+      else if (fresh.length) this.drawIn(view.paths.filter((_, i) => fresh.includes(view.src[i] as number)))
     }
     // keep DOM order equal to scene order
     for (const layer of layers) this.root.appendChild((this.views.get(layer.id) as LayerView).g)
@@ -86,16 +93,21 @@ export class Stage {
 
   // ---- drawing -------------------------------------------------------------------------------
 
-  private draw(layer: Layer, existing?: LayerView): void {
+  /** Paint a layer. Returns the indices of layer paths that are new since the last paint. */
+  private draw(layer: Layer, existing?: LayerView): number[] {
     const items = drawLayer(layer, { seed: this.seed, variant: 0, amp: this.amp, sketch: true })
     let view = existing
     if (!view) {
       const g = document.createElementNS(NS, 'g') as SVGGElement
       g.dataset.id = layer.id
       g.style.transition = 'transform 0.25s ease-out'
-      view = { layer, g, paths: [], variants: [] }
+      view = { layer, g, paths: [], variants: [], src: [], keys: new Set() }
       this.views.set(layer.id, view)
     }
+    const specKeys = layer.paths.map((p) => p.d)
+    const fresh = existing ? freshPaths(view.keys, specKeys) : []
+    view.keys = new Set(specKeys)
+    view.src = items.map((i) => i.src)
     view.layer = layer
     view.variants = [items.map((i) => i.d)]
     view.g.dataset.depth = String(layer.depth)
@@ -113,6 +125,7 @@ export class Stage {
       if (layer.raw) view.g.insertAdjacentHTML('beforeend', layer.raw.replace('<rect', '<rect data-raw="1"'))
     }
     items.forEach((it, i) => this.paint(view.paths[i] as SVGPathElement, it))
+    return fresh
   }
 
   private paint(p: SVGPathElement, it: DrawItem): void {
@@ -129,13 +142,13 @@ export class Stage {
     p.dataset.kind = it.kind
   }
 
-  /** New layers fade in and their outlines are drawn stroke by stroke. */
-  private drawIn(view: LayerView): void {
-    for (const p of view.paths) {
+  /** Outlines are drawn stroke by stroke first, then the colour fills in behind them. */
+  private drawIn(paths: SVGPathElement[]): void {
+    for (const p of paths) {
       if (p.dataset.kind === 'ink') {
         p.setAttribute('pathLength', '1')
-        p.animate([{ strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDasharray: '1 1', strokeDashoffset: 0 }], { duration: DRAW_IN_MS, easing: 'ease-out' })
-      } else p.animate([{ opacity: 0 }, {}], { duration: DRAW_IN_MS, easing: 'ease-out' })
+        p.animate([{ strokeDasharray: '1 1', strokeDashoffset: 1 }, { strokeDasharray: '1 1', strokeDashoffset: 0 }], { duration: DRAW_IN_MS, easing: 'ease-out', fill: 'backwards' })
+      } else p.animate([{ opacity: 0 }, {}], { duration: DRAW_IN_MS - FILL_DELAY_MS, delay: FILL_DELAY_MS, easing: 'ease-out', fill: 'backwards' })
     }
   }
 

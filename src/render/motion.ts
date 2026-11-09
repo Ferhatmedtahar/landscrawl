@@ -6,7 +6,9 @@ export const AMP_ACTIVE = 2.6
 export const AMP_SETTLED = 1.1
 export const SETTLE_MS = 600
 export const BOIL_MS = 140
-export const DRAW_IN_MS = 400
+/** Outline stroke-by-stroke time; the colour fills in after a short delay so you see it being drawn. */
+export const DRAW_IN_MS = 750
+export const FILL_DELAY_MS = 280
 export const FADE_OUT_MS = 350
 
 export function ampFor(msSinceInput: number): number {
@@ -28,4 +30,11 @@ export function diffLayers(prev: string[], next: string[]): LayerDiff {
 export function parallax(depth: number, px: number, py: number): { x: number; y: number } {
   const max = 24
   return { x: -px * max * depth, y: -py * max * 0.35 * depth }
+}
+
+/** Indices of paths whose geometry was not in the layer before: the ones to draw in. */
+export function freshPaths(prev: ReadonlySet<string>, next: readonly string[]): number[] {
+  const out: number[] = []
+  next.forEach((d, i) => { if (!prev.has(d)) out.push(i) })
+  return out
 }
