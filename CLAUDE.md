@@ -21,11 +21,11 @@ Single test file: `npx vitest run test/parser.test.ts`. Single test: `npx vitest
 ## Pipeline (keep the stages pure and separate)
 
 `parse(text, lang)` -> `SceneState` -> `buildScene(state, seed)` -> `Layer[]` -> `renderSvg` / `Stage`.
-See `docs/ARCHITECTURE.md`. Only `src/render/stage.ts`, `src/ui/*` and `src/main.ts` may touch the DOM; `test/constraints.test.ts` enforces it, plus: no `Math.random` in scene code, no network calls, no runtime dependencies, strict CSP in `index.html`.
+See `docs/ARCHITECTURE.md`. Only `src/modules/stage/stage.ts`, `src/modules/ui/*` and `src/main.ts` may touch the DOM; `test/constraints.test.ts` enforces it, plus the module layering (shared < lexicon < scene < parser, render < stage < ui; see `docs/ARCHITECTURE.md` and each folder's README), plus: no `Math.random` in scene code, no network calls, no runtime dependencies, strict CSP in `index.html`.
 
 ## Rules that are easy to break
 
-- Words go in `src/lexicon/lexicon.en.json`, never in code. A new trait needs a field in `SceneState` (`scene/types.ts`), a patch key the tests accept, and drawing code.
+- Words go in `src/modules/lexicon/lexicon.en.json`, never in code. A new trait needs a field in `SceneState` (`scene/model/types.ts`), a patch key the tests accept, and drawing code.
 - Plain mentions in the lexicon are written at 0.6 so intensity modifiers scale them ("heavy" 0.9, "light" 0.3).
 - Archetypes and moods are `soft`: they fill gaps and never override explicit words. Negation is sticky.
 - Colour words attach to the nearest following noun that has a `tint`.
@@ -43,5 +43,5 @@ No accounts, backend, database, analytics, or AI/image-generation calls. No phot
 
 ## UI notes
 
-- Styles are in `src/ui/style.css` (linked from `index.html`, inlined at build with the Bricolage Grotesque font, SIL OFL, in `src/ui/fonts/`). The look follows the earlier Describble site: night background, paper-coloured pill buttons, underlined text box, large art with a thin ring (no glow).
+- Styles are in `src/modules/ui/style.css` (linked from `index.html`, inlined at build with the Bricolage Grotesque font, SIL OFL, in `src/modules/ui/fonts/`). The look follows the earlier Describble site: night background, paper-coloured pill buttons, underlined text box, large art with a thin ring (no glow).
 - The strict CSP is added only in the production build (`vite.config.ts`); in dev it would block Vite's module script.

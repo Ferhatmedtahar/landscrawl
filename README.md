@@ -48,7 +48,7 @@ Time of day, sky, weather, kinds of land and water, plants, and a list of things
 - A small typo in a longer word is forgiven (`mountians`).
 - Whatever you do not mention is filled in from the seed, so the picture stays steady while you type.
 
-The full list of words is in `src/lexicon/lexicon.en.json`. Anything it does not know is shown under the text box instead of being dropped silently.
+The full list of words is in `src/modules/lexicon/lexicon.en.json`. Anything it does not know is shown under the text box instead of being dropped silently.
 
 ## Limits
 

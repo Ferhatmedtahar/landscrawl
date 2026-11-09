@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '../src/parser/parse'
-import { editDistance, normalizeText, stem } from '../src/parser/normalize'
+import { parse } from '../src/modules/parser/parse'
+import { editDistance, normalizeText, stem } from '../src/modules/lexicon/normalize'
 
 describe('normalize and stem', () => {
   it('lowercases, strips accents and punctuation but keeps clause breaks', () => {

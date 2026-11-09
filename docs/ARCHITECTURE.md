@@ -2,16 +2,50 @@
 
 ```
 src/
-  parser/    parse.ts, tokenize.ts, normalize.ts, match.ts, negation.ts, modifiers.ts, chips.ts
-  lexicon/   lexicon.en.json, index.ts (builds lookup tables, registers languages)
-  scene/     types.ts, resolve.ts, palette.ts, buildScene.ts, geometry.ts, profiles.ts, placement.ts, shapes.ts, layers/*.ts
-  render/    prng.ts, jitter.ts, draw.ts, svgRenderer.ts, stage.ts, motion.ts
-  ui/        app.ts, share.ts, export.ts, describe.ts, examples.ts, i18n.ts
-  main.ts
-test/        one file per area; run in Node, no browser
+  main.ts            entry: starts the app
+  modules/           all the code, one folder per module (each has a README.md)
+    shared/            prng, noise, color: tiny pure helpers, depend on nothing
+    lexicon/           the words: lexicon.en.json, index.ts (lookup tables, languages), normalize.ts (text clean-up, plurals, typos)
+    parser/            text -> SceneState: tokenize, match, negation, modifiers, chips, parse
+    scene/             SceneState + seed -> layers
+      model/             types.ts (SceneState, Layer), resolve.ts (fill the blanks from the seed)
+      layout/            geometry.ts, profiles.ts, placement.ts (where things stand)
+      style/             palette.ts (colours from time and weather)
+      art/               shapes.ts (how trees, houses, boats... are drawn)
+      layers/            one file per layer: sky, celestial, clouds, terrain, water, ground, scenery, foreground, weather, paper
+      buildScene.ts      stacks the layers back to front
+    render/            layers -> SVG string: jitter, draw, svgRenderer (pure)
+    stage/             the live <svg> in the page: stage.ts (DOM), motion.ts (boil/settle/draw-in rules)
+    ui/                the page: app, share, export, describe, examples, i18n, topo, style.css, fonts
+test/                one file per area; run in Node, no browser
 ```
 
-Each stage is a pure function you can run in a unit test. Only `render/stage.ts`, `ui/*` and `main.ts` touch the DOM, and a test (`test/constraints.test.ts`) enforces that the rest never reads `document`, `window`, storage or the network.
+Every module folder has a `README.md` saying what it owns and what it may import.
+
+## Who may import whom
+
+Dependencies only point downwards. `test/constraints.test.ts` fails the build if one points up.
+
+```
+shared  <-  lexicon  <-  parser  <-+
+   ^                               +<-  ui  <-  main
+   +-----  scene  <-  render  <-  stage  <-+
+```
+
+| Module | May import |
+| --- | --- |
+| `shared` | nothing |
+| `lexicon` | `shared` |
+| `scene` | `shared` |
+| `parser` | `shared`, `lexicon`, `scene` (types only) |
+| `render` | `shared`, `scene` |
+| `stage` | `shared`, `scene`, `render` |
+| `ui` | everything above |
+| `main` | everything above |
+
+Inside `scene` the order is `model` < `layout` < `style` < `art` < `layers`: a folder may import itself and the ones to its left, never the ones to its right.
+
+Each stage is a pure function you can run in a unit test. Only `stage/stage.ts`, `ui/*` and `main.ts` touch the DOM, and the same test enforces that the rest never reads `document`, `window`, storage or the network.
 
 ## 1. Parse: text to `SceneState`
 
@@ -47,13 +81,13 @@ Output: the `SceneState` from the spec, plus `scale`, `counts`, `optional` (hint
 | 11 | `fog`, `rain`, `snow`, `wind` | only when asked for |
 | 12 | `paper` | grain, vignette, frame line |
 
-**Placement** (`placement.ts`) is pure and tested. Boats and whales are only accepted where `inWater` is true (and off the beach strip), buildings and trees only where `ground.land` is true (never in water, on a cliff, or on the road). Overlaps are rejected, counts are honoured when there is room, and anything with nowhere to go is reported in `skipped`. Objects are placed first so trees keep clear of them. Lit windows, campfires and lighthouse beams add a `glow` layer at dusk and night.
+**Placement** (`scene/layout/placement.ts`) is pure and tested. Boats and whales are only accepted where `inWater` is true (and off the beach strip), buildings and trees only where `ground.land` is true (never in water, on a cliff, or on the road). Overlaps are rejected, counts are honoured when there is room, and anything with nowhere to go is reported in `skipped`. Objects are placed first so trees keep clear of them. Lit windows, campfires and lighthouse beams add a `glow` layer at dusk and night.
 
 ## 3. Render
 
 `drawLayer(layer, {seed, variant, amp, sketch})` turns a layer into `DrawItem`s. Paths are parsed (M L H V C Q A Z, absolute and relative) and flattened into short straight pieces, then each point moves by coherent 2D value noise plus a little shake. Opaque fills get two outline strokes with different jitter; translucent shadow facets get a hatch pattern. The item list has the same structure for every variant, which is what lets the stage swap only the `d` strings when it boils.
 
-`renderSvg` is the pure string renderer (used for tests and export). `Stage` is the live DOM version: four variants cycled every 140 ms, jitter 2.6 units while typing and 1.1 once settled (600 ms), new layers drawn in with `stroke-dashoffset` (400 ms), removed layers faded, parallax on drag or tilt, reduced motion disables all of it.
+`renderSvg` is the pure string renderer (used for tests and export). `Stage` (in `stage/`) is the live DOM version: four variants cycled every 140 ms, jitter 2.6 units while typing and 1.1 once settled (600 ms), new layers drawn in with `stroke-dashoffset` (400 ms), removed layers faded, parallax on drag or tilt, reduced motion disables all of it.
 
 ## Determinism
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mulberry32, subSeed } from '../src/render/prng'
+import { mulberry32, subSeed } from '../src/modules/shared/prng'
 
 describe('mulberry32', () => {
   it('is deterministic', () => {

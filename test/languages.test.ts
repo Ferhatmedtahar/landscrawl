@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { languages, registerLexicon, type RawLexicon } from '../src/lexicon'
-import { parse } from '../src/parser/parse'
-import { EN, langMeta, registerLanguage } from '../src/ui/i18n'
-import { decodeHash } from '../src/ui/share'
+import { languages, registerLexicon, type RawLexicon } from '../src/modules/lexicon'
+import { parse } from '../src/modules/parser/parse'
+import { EN, langMeta, registerLanguage } from '../src/modules/ui/i18n'
+import { decodeHash } from '../src/modules/ui/share'
 
 /** A tiny pretend language: proves that a new language is one JSON-shaped object plus UI strings. */
 const toy: RawLexicon = {

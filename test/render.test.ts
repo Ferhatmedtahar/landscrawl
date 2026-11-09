@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { drawLayer, inkOf, type DrawOptions } from '../src/render/draw'
-import { flatten, jitterPolys, polysToD } from '../src/render/jitter'
-import { AMP_ACTIVE, AMP_SETTLED, SETTLE_MS, VARIANTS, ampFor, diffLayers, freshPaths, nextVariant, parallax } from '../src/render/motion'
-import { cropFor, renderSvg } from '../src/render/svgRenderer'
-import { parse } from '../src/parser/parse'
-import { buildScene } from '../src/scene/buildScene'
-import { VIEW } from '../src/scene/types'
+import { drawLayer, inkOf, type DrawOptions } from '../src/modules/render/draw'
+import { flatten, jitterPolys, polysToD } from '../src/modules/render/jitter'
+import { AMP_ACTIVE, AMP_SETTLED, SETTLE_MS, VARIANTS, ampFor, diffLayers, freshPaths, nextVariant, parallax } from '../src/modules/stage/motion'
+import { cropFor, renderSvg } from '../src/modules/render/svgRenderer'
+import { parse } from '../src/modules/parser/parse'
+import { buildScene } from '../src/modules/scene/buildScene'
+import { VIEW } from '../src/modules/scene/model/types'
 
 const sketch = (variant: number, amp = 2): DrawOptions => ({ seed: 5, variant, amp, sketch: true })
 const scene = () => buildScene(parse('sunset over snowy mountains, a lake, pine forest, clouds'), 5)

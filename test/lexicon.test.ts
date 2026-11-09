@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { buildLexicon, rawLexicons, type Patch } from '../src/lexicon'
-import { emptyScene, OBJECTS, TERRAINS } from '../src/scene/types'
+import { buildLexicon, rawLexicons, type Patch } from '../src/modules/lexicon'
+import { emptyScene, OBJECTS, TERRAINS } from '../src/modules/scene/model/types'
 
 function checkKey(key: string, value: unknown, where: string) {
   if (key.endsWith('+')) {

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '../src/parser/parse'
-import { buildScene } from '../src/scene/buildScene'
-import { HORIZON, inWater, waterGeometry } from '../src/scene/geometry'
-import { shoreProfile } from '../src/scene/layers/ground'
-import { makeGround, placeScenery } from '../src/scene/placement'
-import { resolveScene } from '../src/scene/resolve'
+import { parse } from '../src/modules/parser/parse'
+import { buildScene } from '../src/modules/scene/buildScene'
+import { HORIZON, inWater, waterGeometry } from '../src/modules/scene/layout/geometry'
+import { shoreProfile } from '../src/modules/scene/layers/ground'
+import { makeGround, placeScenery } from '../src/modules/scene/layout/placement'
+import { resolveScene } from '../src/modules/scene/model/resolve'
 
 function place(text: string, seed: number) {
   const r = resolveScene(parse(text), seed)
@@ -137,7 +137,7 @@ describe('balloons and fireflies', () => {
     }
   })
   it('the accessible description mentions them', async () => {
-    const { describeScene } = await import('../src/ui/describe')
+    const { describeScene } = await import('../src/modules/ui/describe')
     expect(describeScene(resolveScene(parse('rainbow, a hot air balloon, night, fireflies'), 3))).toMatch(/rainbow.*|balloon/)
     expect(describeScene(resolveScene(parse('rainbow'), 3))).toContain('a rainbow')
     expect(describeScene(resolveScene(parse('night, fireflies'), 3))).toContain('fireflies')

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { renderSvg } from '../src/render/svgRenderer'
-import { buildScene } from '../src/scene/buildScene'
-import { emptyScene } from '../src/scene/types'
+import { renderSvg } from '../src/modules/render/svgRenderer'
+import { buildScene } from '../src/modules/scene/buildScene'
+import { emptyScene } from '../src/modules/scene/model/types'
 
 const render = (seed: number, time: 'sunset' | 'night' = 'sunset') =>
   renderSvg(buildScene({ ...emptyScene(), time }, seed))

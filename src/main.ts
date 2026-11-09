@@ -1,3 +1,3 @@
-import { startApp } from './ui/app'
+import { startApp } from './modules/ui/app'
 
 startApp()

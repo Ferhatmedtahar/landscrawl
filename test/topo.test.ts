@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { topoLines, topoSvg } from '../src/ui/topo'
+import { topoLines, topoSvg } from '../src/modules/ui/topo'
 
 const opts = { width: 800, height: 500, seed: 11 }
 

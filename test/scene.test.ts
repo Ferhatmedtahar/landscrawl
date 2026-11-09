@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '../src/parser/parse'
-import { renderSvg } from '../src/render/svgRenderer'
-import { buildScene } from '../src/scene/buildScene'
-import { waterGeometry, inWater } from '../src/scene/geometry'
-import { makePalette } from '../src/scene/palette'
-import { resolveScene } from '../src/scene/resolve'
-import { emptyScene } from '../src/scene/types'
+import { parse } from '../src/modules/parser/parse'
+import { renderSvg } from '../src/modules/render/svgRenderer'
+import { buildScene } from '../src/modules/scene/buildScene'
+import { waterGeometry, inWater } from '../src/modules/scene/layout/geometry'
+import { makePalette } from '../src/modules/scene/style/palette'
+import { resolveScene } from '../src/modules/scene/model/resolve'
+import { emptyScene } from '../src/modules/scene/model/types'
 
 const SENTENCES = [
   '', 'zzz qqq', 'sunset over snowy mountains, a small cabin with a lit window, pine forest',
