@@ -8,13 +8,13 @@
   <meta name="color-scheme" content="dark">
   <!--csp-->
   <link rel="stylesheet" href="/src/ui/style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23f6efe1'/%3E%3Ccircle cx='22' cy='11' r='3' fill='%23e8c15a'/%3E%3Cpath d='M3 24 L12 12 L17 19 L21 15 L29 24 Q16 29 3 24Z' fill='%231b1b1f'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23e9efdb'/%3E%3Ccircle cx='22' cy='11' r='3' fill='%23e8c15a'/%3E%3Cpath d='M3 24 L12 12 L17 19 L21 15 L29 24 Q16 29 3 24Z' fill='%230f1a10'/%3E%3C/svg%3E">
 </head>
 <body>
-  <svg id="lines" aria-hidden="true" preserveAspectRatio="none"></svg>
+  <svg id="lines" aria-hidden="true" preserveAspectRatio="xMidYMid slice"></svg>
   <header>
     <a class="wordmark" href="#hero">
-      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#f6efe1"/><circle cx="22" cy="11" r="3" fill="#e8c15a"/><path d="M3 24 L12 12 L17 19 L21 15 L29 24 Q16 29 3 24Z" fill="#1b1b1f"/></svg>
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#e9efdb"/><circle cx="22" cy="11" r="3" fill="#e8c15a"/><path d="M3 24 L12 12 L17 19 L21 15 L29 24 Q16 29 3 24Z" fill="#0f1a10"/></svg>
       <span id="wordmark">Landscrawl</span>
     </a>
     <nav class="tools" aria-label="Language">
@@ -29,7 +29,10 @@
       </div>
       <div class="drawing"><div id="stage"></div></div>
       <div class="composer">
-        <textarea id="text" rows="3" spellcheck="false" autocomplete="off" aria-label="Describe your landscape"></textarea>
+        <div class="field">
+          <textarea id="text" rows="2" spellcheck="false" autocomplete="off" aria-label="Describe your landscape"></textarea>
+          <svg class="pencil" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 013 3L8 19l-4 1zM14 7l3 3"/></svg>
+        </div>
         <p id="status" aria-live="polite"></p>
         <div class="actions">
           <button class="button primary" id="btn-png" type="button"></button>
@@ -53,12 +56,10 @@
 
     <section aria-labelledby="examples-title">
       <h2 id="examples-title"></h2>
-      <p id="examples-note"></p>
       <ul id="examples"></ul>
     </section>
 
-    <section aria-labelledby="how-title">
-      <h2 id="how-title"></h2>
+    <section aria-label="About">
       <div class="how" id="how"></div>
     </section>
   </main>

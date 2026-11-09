@@ -5,8 +5,6 @@ export interface Strings {
   headline: string
   lede: string
   examplesTitle: string
-  examplesNote: string
-  howTitle: string
   how: [string, string, string]
   license: string
   tagline: string
@@ -38,14 +36,8 @@ export const EN: LangMeta = {
     headline: 'Describe a place. Watch it get drawn.',
     lede: 'Hand-drawn landscapes from a sentence. No AI, no account, nothing to install.',
     examplesTitle: 'Start from one of these',
-    examplesNote: 'Tap a sentence to draw it, then change any word.',
-    howTitle: 'No AI. Just words and a pencil.',
-    how: [
-      'Your sentence is read by plain rules, word by word: places, weather, time of day, things. What it does not know it tells you.',
-      'The picture is built from layers (sky, mountains, water, trees, things) with a seed, so the same sentence always draws the same landscape. Re-roll for a new one.',
-      'Everything happens in this page. Download a PNG or a vector SVG, or copy a link: the link holds your sentence, and nothing is ever sent to a server.',
-    ],
-    license: 'Code is MIT, the drawings are CC0. Free to use for anything.',
+    how: ['No AI, just words and a pencil.', 'Everything runs in this page.', 'Nothing is sent anywhere.'],
+    license: 'Code MIT, drawings CC0.',
     tagline: 'Describe a landscape and watch it get drawn.',
     label: 'Describe your landscape',
     png: 'Download PNG',
@@ -59,7 +51,7 @@ export const EN: LangMeta = {
     nothingYet: 'Nothing yet: try "sunset over snowy mountains".',
     unknown: "I didn't know:",
     unused: 'Not used:',
-    privacy: 'Runs in your browser. Nothing is sent anywhere, and there is no tracking.',
+    privacy: 'No tracking.',
     removeChip: (label) => `Remove ${label}`,
   },
 }

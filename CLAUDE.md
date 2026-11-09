@@ -14,7 +14,6 @@ npm test                 # vitest, runs in Node
 npm run typecheck        # tsc --noEmit (strict)
 npm run build            # tsc + vite build, one self-contained dist/index.html
 npm run dev
-npm run docs:images      # regenerates docs/gallery.png and docs/demo.gif (needs Chrome and ImageMagick)
 ```
 
 Single test file: `npx vitest run test/parser.test.ts`. Single test: `npx vitest run -t "negation"`.

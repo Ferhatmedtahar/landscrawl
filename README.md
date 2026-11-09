@@ -1,6 +1,6 @@
 # Landscrawl
 
-Type a sentence. A hand-drawn landscape is drawn live in your browser.
+Type a sentence and a landscape gets drawn while you type, in pencil, in your browser.
 
 ![Typing a sentence: the scene grows word by word](docs/demo.gif)
 
@@ -12,68 +12,52 @@ sahara dunes at night, full moon, a lone palm
 
 ![Six landscapes from six sentences](docs/gallery.png)
 
-- **100% client-side.** No backend, no API calls, no AI model, no account, no analytics. It works offline.
-- **One file.** `npm run build` produces a single `dist/index.html` (about 160 KB, font included) that also runs from disk.
-- **Vector output.** Export SVG or a 2x PNG, in 16:9, 4:3, 1:1 or 9:16.
-- **Shareable without a server.** The sentence, seed and shape live in the URL hash (`#s=…&t=…&l=en&r=16:9`), which browsers never send anywhere.
-- **Same look as Describble.** The page keeps the earlier project's layout, pill buttons and underlined input.
-- **Honest.** Words it does not understand are listed ("I didn't know: …"); nothing is silently ignored.
-- **Original art.** Code is MIT, the drawings are CC0 ([LICENSE](LICENSE), [LICENSE-ASSETS](LICENSE-ASSETS)).
+There is no AI in it, no account, and no server. The sentence is read by plain rules, word by word, and the picture is built from layers (sky, mountains, water, trees, things) with a seed. The same sentence and seed always give the same drawing. Press Re-roll if you want another one.
 
-## Try it
+You can download the result as an SVG or a PNG in 16:9, 4:3, 1:1 or 9:16, or copy a link. The link carries the sentence in the URL hash, which browsers never send to anyone, so sharing needs no backend either.
+
+## Where it comes from
+
+Landscrawl started as a fork of [Describble](https://github.com/gasparegas/describble) ([describble.com](https://describble.com)), a small open-source project that draws a character avatar from a description. I liked the idea a lot: a text box that is the whole interface, a drawing that trembles while you type, a parser that tells you honestly what it did not understand. I wanted the same thing for places instead of faces.
+
+So the idea, the first version of the page and the parser approach are Describble's. The landscape lexicon, the scene builder, the renderer and the topographic look are new here. Describble is MIT, and its copyright line is kept in [LICENSE](LICENSE). If you like this, go and look at the original too.
+
+## Running it
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # the whole suite, no browser needed
-npm run build      # dist/index.html, one self-contained file
+npm test
+npm run build      # one self-contained dist/index.html
 ```
 
-Node 20+ (22 recommended, see `.nvmrc`). There are no runtime dependencies: Vite, TypeScript, Vitest and `vite-plugin-singlefile` are dev tools only.
+Node 20 or newer (`.nvmrc` has 22). There are no runtime dependencies; Vite, TypeScript and Vitest are only used to build and test. The build is a single HTML file of about 160 KB, font included, and it also opens straight from disk.
 
-## What you can say
+## What it understands
 
-Landscapes are built from plain words, and later words win ("day … night" is night). It understands:
+Time of day, sky, weather, kinds of land and water, plants, and a list of things you can put in the scene (a cabin, a boat, a lighthouse, a camel, a campfire and so on). A few habits make it forgiving:
 
-| Kind | Examples |
-| --- | --- |
-| Time | dawn, sunrise, noon, golden hour, dusk, twilight, night, midnight |
-| Sky | full moon, crescent moon, stars, milky way, aurora, northern lights, sunny, overcast |
-| Weather | rain, drizzle, downpour, storm, snow, blizzard, fog, mist, haze, wind, gale, calm |
-| Land | mountains, hills, dunes, plains, valley, cliffs, canyon, mesa, volcano, tundra, glacier, savanna, swamp, beach, island |
-| Water | sea, lake, river, waterfall, iceberg, pond, fjord, bay |
-| Plants | forest, pine, palm, cactus, flowers, grass, dead trees, "a lone tree" |
-| Things | cabin, house, village, boat, road, bridge, lighthouse, tent, campfire, windmill, birds, castle, casbah, mosque, camel, igloo, pyramid, ruins, sled, penguins, whale |
-| Moods | cozy, lonely, grand, spooky |
-| Scenes | sahara, desert, arctic, antarctica, tropical, haunted, alpine, oasis, coast, jungle, fjord, highlands, countryside, mediterranean, hoggar, kabylie |
+- Later words win: "day ... night" is night.
+- Negation works, even on something you said earlier: `no clouds`, `without snow or wind`.
+- Strength and size words scale things: `heavy rain`, `a few clouds`, `tiny village`, `two boats`.
+- A colour paints the nearest noun after it: `red sky`, `purple mountains`.
+- A small typo in a longer word is forgiven (`mountians`).
+- Whatever you do not mention is filled in from the seed, so the picture stays steady while you type.
 
-And how you say it:
+The full list of words is in `src/lexicon/lexicon.en.json`. Anything it does not know is shown under the text box instead of being dropped silently.
 
-- **Plurals and typos:** `mountians` still draws mountains (one slip is forgiven in words of 5+ letters).
-- **Negation:** `no clouds`, `without snow or wind` remove things, even ones mentioned earlier.
-- **Intensity and size:** `heavy rain`, `light fog`, `a few clouds`, `tiny village`, `huge sun`, `two boats`, `a lone palm`.
-- **Colours:** `red sky`, `purple mountains`, `green water` paint the nearest noun.
-- **Anything you leave out** is filled in from the seed, so the picture stays stable while you type and changes with **Re-roll**.
+## Limits
 
-## How it works
+- It draws a kind of place, not a real one. `sahara` gives you dunes and warm light, not a map.
+- The typo tolerance is sometimes too eager on short words (`horse` can become `house`).
+- Colours go before the noun, not after.
+- A bridge needs water to cross; without any, it is left out.
+- English only for now. A new language is one lexicon file plus the UI strings.
 
-```
-text ──parse()──▶ SceneState ──buildScene()──▶ Layer[] ──render()──▶ SVG
-        pure          pure + seed                 pure / DOM stage
-```
+## Contributing
 
-The parser is rule-based (no ML), the scene builder is a set of pure functions fed by a seeded PRNG (mulberry32), and the renderer turns each path into a short-segment wobbly line, with a double-line outline and hatching. The live stage cycles four jitter variants at about 7 fps so lines tremble, settles 600 ms after you stop typing, draws new elements in, and shifts layers when you drag for a little parallax. `prefers-reduced-motion` turns the boil, draw-in and parallax easing off.
+Missing a word, or got a drawing that looks wrong? Open an issue with the sentence. To add words or a language, see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md); [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) explains how the pieces fit.
 
-More in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). To add a word or a language, see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+## Licence
 
-## Known limits
-
-- It draws a landscape, not a specific place: `sahara` gives dunes, sun and warm colours, not a map of the Sahara.
-- Typo tolerance can over-reach on short words (`horse` can read as `house`). Edit-distance 1 is a trade-off.
-- Colours go in front of the noun (`red sky`, not `sky red`).
-- A `bridge` needs water to span; without any it is left out and nothing is drawn.
-- English only for now. Adding a language is one lexicon file plus UI strings.
-
-## Credits
-
-Landscrawl grew out of an earlier open-source prototype, Describble (MIT). The original copyright notice is kept in [LICENSE](LICENSE). All drawing code here is new.
+Code is MIT and the drawings are CC0, so use them anywhere. See [LICENSE](LICENSE) and [LICENSE-ASSETS](LICENSE-ASSETS). The font is Bricolage Grotesque under the SIL Open Font License.

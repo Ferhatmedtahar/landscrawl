@@ -5,7 +5,7 @@ import { tokenizeSpans } from '../src/parser/tokenize'
 import { buildScene } from '../src/scene/buildScene'
 import { resolveScene } from '../src/scene/resolve'
 import { describeScene } from '../src/ui/describe'
-import { EXAMPLES } from '../src/ui/examples'
+import { EXAMPLES, PILL_CHARS, shorten } from '../src/ui/examples'
 import { fileName, pngSize, svgForDownload, withSize } from '../src/ui/export'
 import { langMeta } from '../src/ui/i18n'
 import { decodeHash, encodeHash, hasHashState, MAX_TEXT, type ShareState } from '../src/ui/share'
@@ -127,5 +127,16 @@ describe('i18n', () => {
   it('English is left to right and falls back for unknown codes', () => {
     expect(langMeta('en').dir).toBe('ltr'); expect(langMeta('zz').code).toBe('en')
     expect(langMeta('en').strings.removeChip('rain')).toContain('rain')
+  })
+})
+
+describe('example pills', () => {
+  it('shortens long sentences with an ellipsis and leaves short ones alone', () => {
+    expect(shorten('foggy lake')).toBe('foggy lake')
+    const long = shorten('sunset over snowy mountains, a small cabin with a lit window')
+    expect(long.length).toBeLessThanOrEqual(PILL_CHARS)
+    expect(long.endsWith('…')).toBe(true)
+    expect(long).not.toMatch(/[,\s]…$/)
+    for (const e of EXAMPLES) expect(shorten(e).length).toBeLessThanOrEqual(PILL_CHARS)
   })
 })

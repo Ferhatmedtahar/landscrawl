@@ -47,3 +47,12 @@ export const EXAMPLES: readonly string[] = [
 ]
 
 export const PLACEHOLDER_CYCLE_MS = 4000
+
+/** Longest example label shown on a pill; the full sentence stays in the tooltip and is what gets drawn. */
+export const PILL_CHARS = 26
+
+/** Cut text to at most `max` characters, ending in an ellipsis, without leaving a dangling space or comma. */
+export function shorten(text: string, max = PILL_CHARS): string {
+  if (text.length <= max) return text
+  return `${text.slice(0, max - 1).trimEnd().replace(/[,;:\s]+$/, '')}…`
+}

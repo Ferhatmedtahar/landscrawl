@@ -88,7 +88,7 @@ The engine is language-agnostic: phrases, plurals (`stem` in `src/parser/normali
 - Colours go through `pal.lit(hex, haze)` so they follow the time of day and weather.
 - New object kinds need: an entry in `OBJECTS` (`types.ts`), a drawer in `shapes.ts`, a size in `placement.ts`, and a word in the lexicon. `test/scenery.test.ts` runs every object kind through the placement rules.
 - Never use `Math.random()`; use the seeded PRNG (`mulberry32(subSeed(seed, 'label'))`). A test enforces it.
-- Preview: `npm run dev`, or `npm run docs:images` to regenerate the README pictures.
+- Preview: `npm run dev`.
 
 ## Before you open a pull request
 
