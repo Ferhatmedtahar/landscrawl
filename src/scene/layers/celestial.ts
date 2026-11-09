@@ -68,6 +68,20 @@ function auroraPaths(r: Resolved, seed: number): { defs: string; paths: PathSpec
   return { defs, paths }
 }
 
+const RAINBOW = ['#e8453c', '#f28c38', '#f5d94a', '#6cc26a', '#4aa3d8', '#4a5fc4', '#8a5bb8'] as const
+
+/** Seven stroked arcs, red outside to violet inside, standing on the ground line. Fainter in the dark and under heavy cloud. */
+function rainbowPaths(r: Resolved, seed: number): PathSpec[] {
+  const rng = mulberry32(subSeed(seed, 'rainbow'))
+  const cx = 380 + rng() * 840, big = 470 + rng() * 120, band = 15, cy = HORIZON + 60
+  const dim = { night: 0.35, dusk: 0.6, dawn: 0.8, sunset: 0.9, day: 1 }[r.time]
+  const opacity = Math.round((0.2 + 0.7 * r.rainbow) * dim * (1 - r.weather.clouds * 0.3) * 100) / 100
+  return RAINBOW.map((color, k) => {
+    const rad = big - k * band
+    return { d: `M${f1(cx - rad)} ${f1(cy)}A${f1(rad)} ${f1(rad)} 0 0 1 ${f1(cx + rad)} ${f1(cy)}`, stroke: color, strokeWidth: band + 1, opacity }
+  })
+}
+
 export function celestialLayer(r: Resolved, pal: Pal): Layer {
   const { sun, moon } = skyBodies(r)
   const dim = 1 - r.weather.clouds * 0.45
@@ -104,5 +118,6 @@ export function celestialLayer(r: Resolved, pal: Pal): Layer {
     defs += a.defs
     paths.push(...a.paths)
   }
+  if (r.rainbow > 0) paths.push(...rainbowPaths(r, r.seed))
   return { id: 'celestial', depth: 0.02, defs, paths }
 }

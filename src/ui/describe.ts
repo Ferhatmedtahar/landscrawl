@@ -15,7 +15,8 @@ export function describeScene(r: Resolved): string {
   if (v.cactus > 0.05) parts.push('cacti')
   if (v.deadTrees > 0.05) parts.push('dead trees')
   if (v.loneTree) parts.push('a lone tree')
-  for (const o of r.objects) parts.push(o.count > 1 ? `${o.count} ${o.kind}s` : `a ${o.kind}`)
+  for (const o of r.objects) { const name = o.kind === 'balloon' ? 'hot air balloon' : o.kind; parts.push(o.count > 1 ? `${o.count} ${name}s` : `a ${name}`) }
+  if (r.fireflies && r.time !== 'day') parts.push('fireflies')
   const weather: string[] = []
   const w = r.weather
   if (w.rain > 0.1) weather.push(w.rain > 0.7 ? 'heavy rain' : 'rain')
@@ -28,6 +29,7 @@ export function describeScene(r: Resolved): string {
   if (r.moon !== 'none') sky.push(`a ${r.moon} moon`)
   if (r.stars > 0.3) sky.push('stars')
   if (r.aurora > 0.3) sky.push('northern lights')
+  if (r.rainbow > 0.3) sky.push('a rainbow')
   let text = `A hand-drawn landscape at ${r.time}: ${list(parts)}`
   if (weather.length) text += `, with ${list(weather)}`
   if (sky.length) text += `. In the sky: ${list(sky)}`

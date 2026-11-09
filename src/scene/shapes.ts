@@ -197,6 +197,19 @@ function drawObject(o: PlacedObject, r: Resolved, pal: Pal, glows: Glow[], beams
       out.push({ d, stroke: dark > 0.5 ? '#aab4d0' : '#2a2a38', strokeWidth: 2.2, still: false })
       break
     }
+    case 'balloon': {
+      const tint = (h: string) => pal.lit(h, 0.06) // up in the sky there is no ground haze
+      const b = new Ctx(o.x, o.y, o.s, out, tint)
+      const skin = (['#d9534f', '#f2a93b', '#3f7fbf', '#8a5bb8'] as const)[Math.floor(rng() * 4)] as string
+      b.line([[-20, -64], [-9, -24]], '#4a3322', 1.6); b.line([[20, -64], [9, -24]], '#4a3322', 1.6); b.line([[0, -62], [0, -24]], '#4a3322', 1.6)
+      b.poly([[-11, -24], [11, -24], [9, -3], [-9, -3]], '#9a6a3a')
+      b.blob([[-37, -100], [-31, -124], [0, -137], [31, -124], [37, -100], [23, -76], [9, -62], [-9, -62], [-23, -76]], skin)
+      b.blob([[-13, -132], [0, -137], [13, -132], [15, -100], [8, -65], [-8, -65], [-15, -100]], '#f4efe3', { outline: false })
+      b.line([[-24, -118], [-14, -70]], shade(skin, 0.8), 2, { opacity: 0.7 })
+      b.line([[24, -118], [14, -70]], shade(skin, 0.8), 2, { opacity: 0.7 })
+      if (dark > 0.5) { const [gx, gy] = b.p([0, -58]); glows.push({ x: gx, y: gy, r: 38 * b.s, kind: 'warm' }) }
+      break
+    }
     case 'castle': {
       const st = '#9a9aa6'
       c.rect(-40, -80, 40, 0, st); c.rect(-62, -110, -36, 0, shade(st, 0.92)); c.rect(36, -110, 62, 0, shade(st, 0.92)); c.rect(-14, -120, 14, -80, shade(st, 1.05))

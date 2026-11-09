@@ -37,12 +37,12 @@ Output: the `SceneState` from the spec, plus `scale`, `counts`, `optional` (hint
 | # | Layer ids | Notes |
 | - | --- | --- |
 | 1 | `sky` | gradient from time, greyed by weather and tints |
-| 2 | `celestial` | sun, moon phases, stars, aurora, glows |
+| 2 | `celestial` | sun, moon phases, stars, aurora, rainbow, glows |
 | 3 | `clouds` | count and size from `weather.clouds` |
 | 4-5 | `far`, `terrain-0`, `terrain-1` | ridges from seeded noise: mountains, hills, dunes, mesa, canyon, volcano, glacier, valley; snow caps and shadow facets |
 | 6 | `ground-mid`, `sea`, `lake`, `river` | water shapes come from `waterGeometry` (also used for placement) |
 | 7 | `ground-near` | beach, bank, sea cliff |
-| 8-9 | `road`, `vegetation`, `objects`, `glow` | see below |
+| 8-9 | `road`, `vegetation`, `objects`, `glow`, `fireflies` | see below |
 | 10 | `foreground` | grass tufts, rocks, flowers, drifts |
 | 11 | `fog`, `rain`, `snow`, `wind` | only when asked for |
 | 12 | `paper` | grain, vignette, frame line |

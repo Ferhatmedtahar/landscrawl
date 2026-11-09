@@ -15,6 +15,7 @@ export interface Resolved {
   moon: MoonPhase
   stars: number
   aurora: number
+  rainbow: number
   terrain: Terrain[]
   /** The main land form drawn behind everything. */
   backdrop: Terrain
@@ -33,6 +34,7 @@ export interface Resolved {
   spooky: number
   smoke: boolean
   reflection: boolean
+  fireflies: boolean
   state: SceneState
 }
 
@@ -48,7 +50,8 @@ export function resolveScene(state: SceneState, seed: number): Resolved {
   const pick = <T,>(list: readonly T[], r: number) => list[Math.min(list.length - 1, Math.floor(r * list.length))] as T
 
   const timePool: TimeOfDay[] = state.celestial.sun ? ['dawn', 'day', 'day', 'sunset'] : ['dawn', 'day', 'day', 'sunset', 'sunset', 'dusk', 'night']
-  const time = state.time ?? pick(timePool, rTime)
+  // fireflies need the dark: when no time is said, the seed picks dusk or night
+  const time = state.time ?? (state.details.fireflies ? pick<TimeOfDay>(['dusk', 'night', 'night'], rTime) : pick(timePool, rTime))
 
   let terrain = [...state.terrain]
   if (terrain.length === 0) {
@@ -103,9 +106,9 @@ export function resolveScene(state: SceneState, seed: number): Resolved {
   }))
 
   return {
-    seed, time, weather, sun, moon, stars, aurora, terrain, backdrop, waters,
+    seed, time, weather, sun, moon, stars, aurora, rainbow: state.celestial.rainbow, terrain, backdrop, waters,
     iceberg: has('iceberg'), waterfall: has('waterfall'), beach: has('beach'), cliffs: has('cliffs'),
     surface, snowCover, palette: state.palette, grass, flowers: state.vegetation.flowers, vegetation: veg, objects,
-    spooky: state.mood.spooky, smoke: state.details.smoke, reflection: state.details.reflection, state,
+    spooky: state.mood.spooky, smoke: state.details.smoke, reflection: state.details.reflection, fireflies: state.details.fireflies, state,
   }
 }

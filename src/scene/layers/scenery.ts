@@ -52,6 +52,14 @@ export function sceneryLayers(r: Resolved, pal: Pal, seed: number, water: WaterG
     const flipped = defs + `<linearGradient id="beam-l" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fff3b0" stop-opacity="0.7"/><stop offset="1" stop-color="#fff3b0" stop-opacity="0"/></linearGradient>`
     layers.push({ id: 'glow', depth: 0.75, defs: flipped, paths })
   }
+  if (r.fireflies && dark >= 0.3 && scenery.fireflies.length) {
+    const ring = (k: number) => scenery.fireflies.map((f) => circlePath(f.x, f.y, f.r * k)).join('')
+    layers.push({ id: 'fireflies', depth: 0.85, paths: [
+      { d: ring(8), fill: '#f2ec7a', opacity: 0.12 * dark, still: true },
+      { d: ring(3.4), fill: '#f6f08a', opacity: 0.3 * dark, still: true },
+      { d: ring(1), fill: '#fffbb8', opacity: 0.95, still: true },
+    ] })
+  }
   void VIEW
   return { layers, scenery }
 }

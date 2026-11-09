@@ -2586,6 +2586,41 @@
     "celestial.sun": true,
     "weather.fog": 0.15
    }
+  },
+  {
+   "keys": [
+    "rainbow",
+    "rainbows"
+   ],
+   "set": {
+    "celestial.rainbow": 0.6
+   }
+  },
+  {
+   "keys": [
+    "fireflies",
+    "firefly",
+    "lightning bugs",
+    "lightning bug",
+    "glowworms",
+    "glow worms"
+   ],
+   "set": {
+    "details.fireflies": true
+   }
+  },
+  {
+   "keys": [
+    "hot air balloon",
+    "air balloon",
+    "balloon",
+    "montgolfier"
+   ],
+   "set": {
+    "objects+": [
+     "balloon"
+    ]
+   }
   }
  ]
 }

@@ -48,11 +48,11 @@ Plurals and one typo are handled for you, and phrases are fine (`"golden hour"`)
 
 - `"time": "dawn" | "day" | "sunset" | "dusk" | "night"`
 - `"weather.clouds" | "weather.rain" | "weather.snow" | "weather.fog" | "weather.wind": 0..1`. Write a plain mention at **0.6**: "heavy" (0.9) and "light" (0.3) scale from that.
-- `"celestial.sun": true`, `"celestial.moon": "none" | "crescent" | "half" | "full"`, `"celestial.stars"`, `"celestial.aurora": 0..1`
+- `"celestial.sun": true`, `"celestial.moon": "none" | "crescent" | "half" | "full"`, `"celestial.stars"`, `"celestial.aurora" | "celestial.rainbow": 0..1`
 - `"terrain+": ["mountains", "lake"]` and `"objects+": ["cabin"]` add to a list. The names must exist in `TERRAINS` / `OBJECTS` in `src/scene/types.ts`.
 - `"vegetation.forest" | "pine" | "palm" | "grass" | "flowers" | "cactus" | "deadTrees": 0..1`, `"vegetation.loneTree": true`
 - `"surface.snowCover": 0..1`, `"palette.skyTint"`, `"palette.groundTint"`, `"palette.waterTint"`, `"palette.foliageTint": "#rrggbb"`
-- `"mood.cozy" | "lonely" | "grand" | "spooky": 0..1`, `"details.litWindows" | "smoke" | "reflection": true`
+- `"mood.cozy" | "lonely" | "grand" | "spooky": 0..1`, `"details.litWindows" | "smoke" | "reflection" | "fireflies": true`
 
 A word listed under several traits turns all of them on: that is how archetypes like `sahara` work. `src/scene/types.ts` is the model; `test/lexicon.test.ts` checks every key and value, so a typo in a patch fails the tests.
 

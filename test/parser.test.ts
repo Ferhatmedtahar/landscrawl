@@ -329,3 +329,19 @@ describe('spec examples', () => {
     expect(s.vegetation.loneTree).toBe(true); expect(s.unknownWords).toEqual([])
   })
 })
+
+describe('rainbow, fireflies and hot air balloon', () => {
+  it('rainbow sets the sky trait, and modifiers and negation work', () => {
+    expect(parse('a rainbow').celestial.rainbow).toBeGreaterThan(0.5)
+    expect(parse('a vivid rainbow').celestial.rainbow).toBeGreaterThan(parse('a faint rainbow').celestial.rainbow)
+    expect(parse('rainbow, no rainbow').celestial.rainbow).toBe(0)
+  })
+  it('fireflies turn the detail on, and can be negated', () => {
+    for (const w of ['fireflies', 'a few fireflies', 'glowing lightning bugs']) expect(parse(w).details.fireflies, w).toBe(true)
+    expect(parse('fireflies, no fireflies').details.fireflies).toBe(false)
+  })
+  it('a hot air balloon is an object, and "lightning bugs" is not a storm', () => {
+    for (const w of ['hot air balloon', 'a balloon', 'two balloons']) expect(parse(w).objects, w).toContain('balloon')
+    expect(parse('lightning bugs').weather.rain).toBe(0)
+  })
+})

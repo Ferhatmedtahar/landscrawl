@@ -43,6 +43,8 @@ export const EXAMPLES: readonly string[] = [
   'eerie night, an old ruins, dead trees, fog, crescent moon',
   'a pond with flowers, a few trees, spring morning',
   'oasis at night, a campfire, a tent, shooting stars',
+  'rainbow over green hills, a lake, a hot air balloon, light rain',
+  'forest at night, fireflies, a cabin with a lit window',
   'steppe at dusk, a yurt, a campfire, a lone tree, lots of grass',
 ]
 

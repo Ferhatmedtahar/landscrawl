@@ -9,8 +9,12 @@ export interface PlacedTree { kind: TreeKind; x: number; y: number; s: number; s
 export interface PlacedObject { kind: SceneObject; x: number; y: number; s: number; seed: number; x2?: number; onIslet?: boolean }
 export interface Box { x0: number; y0: number; x1: number; y1: number }
 
+export interface Firefly { x: number; y: number; r: number }
+
 export interface Scenery {
   objects: PlacedObject[]
+  /** Hovering lights over dry land. */
+  fireflies: Firefly[]
   trees: PlacedTree[]
   /** Centre line of the road, near to far, with half-widths. */
   road?: { x: number; y: number; hw: number }[]
@@ -21,7 +25,7 @@ export interface Scenery {
 /** Perspective: things lower on the screen are nearer and larger. */
 export const scaleAt = (y: number) => Math.min(1.3, Math.max(0.38, 0.4 + ((y - 610) / 270) * 0.9))
 
-const KIND_SIZE: Partial<Record<SceneObject, number>> = { cabin: 1.35, house: 1.25, village: 1.5, tent: 1.35, campfire: 1.4, pyramid: 2.4, lighthouse: 1.5, windmill: 1.5, mosque: 1.3, casbah: 1.4, camel: 1.5, penguins: 1.6, boat: 1.2, whale: 1.4, castle: 1.3, igloo: 1.7, ruins: 1.3, sled: 1.5 }
+const KIND_SIZE: Partial<Record<SceneObject, number>> = { cabin: 1.35, house: 1.25, village: 1.5, tent: 1.35, campfire: 1.4, balloon: 1.1, pyramid: 2.4, lighthouse: 1.5, windmill: 1.5, mosque: 1.3, casbah: 1.4, camel: 1.5, penguins: 1.6, boat: 1.2, whale: 1.4, castle: 1.3, igloo: 1.7, ruins: 1.3, sled: 1.5 }
 /** Half-width of each thing at scale 1, for overlap checks. */
 const HALF_W: Partial<Record<SceneObject, number>> = { cabin: 55, house: 62, village: 120, boat: 50, tent: 48, campfire: 22, windmill: 45, castle: 90, casbah: 100, mosque: 70, camel: 50, igloo: 55, pyramid: 100, ruins: 80, sled: 40, penguins: 50, lighthouse: 26, whale: 90 }
 const HEIGHT: Partial<Record<SceneObject, number>> = { cabin: 80, house: 95, village: 100, boat: 90, tent: 60, campfire: 40, windmill: 130, castle: 140, casbah: 90, mosque: 140, camel: 80, igloo: 60, pyramid: 100, ruins: 90, sled: 40, penguins: 50, lighthouse: 150, whale: 60 }
@@ -73,7 +77,7 @@ const WATER_OBJECTS: ReadonlySet<SceneObject> = new Set(['boat', 'whale'])
 
 /** Decide where everything stands. Pure: same scene and seed give the same placement. */
 export function placeScenery(r: Resolved, seed: number, water: WaterGeo, ground: Ground): Scenery {
-  const out: Scenery = { objects: [], trees: [], skipped: [] }
+  const out: Scenery = { objects: [], fireflies: [], trees: [], skipped: [] }
   const taken: Box[] = []
   const landOk = (x: number, y: number, hw: number) => ground.land(x - hw, y) && ground.land(x, y) && ground.land(x + hw, y) && ground.land(x, y - 6)
   const waterOk = (x: number, y: number, hw: number) => {
@@ -107,6 +111,16 @@ export function placeScenery(r: Resolved, seed: number, water: WaterGeo, ground:
   for (const o of r.objects) {
     if (o.kind === 'road') continue
     const rng = mulberry32(subSeed(seed, `obj:${o.kind}`))
+    if (o.kind === 'balloon') {
+      // one slot per balloon, so they never stack; each floats well inside the frame
+      for (let i = 0; i < o.count; i++) {
+        const s = (0.85 + rng() * 0.4) * 1.1 * o.scale
+        const x = 200 + ((i + 0.15 + rng() * 0.7) / o.count) * 1200
+        const y = Math.max(250 + rng() * 120, 140 * s + 10)
+        out.objects.push({ kind: 'balloon', x, y, s, seed: Math.floor(rng() * 1e9) })
+      }
+      continue
+    }
     if (SKY_OBJECTS.has(o.kind)) {
       const cx = 300 + rng() * 1000, cy = 170 + rng() * 170
       for (let i = 0; i < o.count; i++) out.objects.push({ kind: o.kind, x: cx + (rng() - 0.5) * 260, y: cy + (rng() - 0.5) * 90, s: (0.8 + rng() * 0.6) * o.scale, seed: Math.floor(rng() * 1e9) })
@@ -157,6 +171,15 @@ export function placeScenery(r: Resolved, seed: number, water: WaterGeo, ground:
       placed++
     }
     if (placed === 0) out.skipped.push(o.kind)
+  }
+
+  // ---- fireflies: small lights hovering over dry land
+  if (r.fireflies) {
+    const rngF = mulberry32(subSeed(seed, 'fireflies'))
+    for (let tries = 0; tries < 600 && out.fireflies.length < 46; tries++) {
+      const x = 60 + rngF() * (VIEW.w - 120), y = 640 + rngF() * 230, rad = 1.8 + rngF() * 2
+      if (ground.land(x, y)) out.fireflies.push({ x, y, r: rad })
+    }
   }
 
   // ---- plants: patches of the main kinds, never on water, the road or a building
