@@ -14,6 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/Ferhatmedtahar/landscrawl.git"
   },
+  "homepage": "https://landscrawl.vercel.app",
   "bugs": {
     "url": "https://github.com/Ferhatmedtahar/landscrawl/issues"
   },

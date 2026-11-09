@@ -4,6 +4,8 @@ Type a sentence and a landscape gets drawn while you type, in pencil, in your br
 
 ![License: MIT](https://img.shields.io/badge/code-MIT-blue) ![Drawings: CC0](https://img.shields.io/badge/drawings-CC0-lightgrey) ![No AI](https://img.shields.io/badge/AI-none-green) ![No backend](https://img.shields.io/badge/backend-none-green)
 
+**Try it: [landscrawl.vercel.app](https://landscrawl.vercel.app)**
+
 ![Typing a sentence: the scene grows word by word](docs/demo.gif)
 
 ```text
