@@ -35,7 +35,7 @@ function button(className: string, text: string): HTMLButtonElement {
 function fillStaticText(S: Strings): void {
   const set = (id: string, text: string) => { byId(id).textContent = text }
   set('wordmark', S.appName); set('kicker', S.kicker); set('headline', S.headline); set('lede', S.lede)
-  set('examples-title', S.examplesTitle); set('license', S.license); set('privacy', S.privacy)
+  set('examples-title', S.examplesTitle); set('needs', S.needs); set('license', S.license); set('privacy', S.privacy)
   set('btn-png', S.png); set('btn-svg', S.svg); set('btn-copy', S.copy); set('btn-surprise', S.surprise); set('btn-reroll', S.reroll)
   set('legend-ratio', S.ratio); set('chips-title', S.understood)
   byId('how').replaceChildren(...S.how.map((text) => Object.assign(document.createElement('p'), { textContent: text })))

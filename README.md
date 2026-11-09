@@ -2,6 +2,8 @@
 
 Type a sentence and a landscape gets drawn while you type, in pencil, in your browser.
 
+![License: MIT](https://img.shields.io/badge/code-MIT-blue) ![Drawings: CC0](https://img.shields.io/badge/drawings-CC0-lightgrey) ![No AI](https://img.shields.io/badge/AI-none-green) ![No backend](https://img.shields.io/badge/backend-none-green)
+
 ![Typing a sentence: the scene grows word by word](docs/demo.gif)
 
 ```text
@@ -53,6 +55,10 @@ The full list of words is in `src/lexicon/lexicon.en.json`. Anything it does not
 - Colours go before the noun, not after.
 - A bridge needs water to cross; without any, it is left out.
 - English only for now. A new language is one lexicon file plus the UI strings.
+
+## Made by
+
+Built by [Ferhat Mohamed Tahar](https://github.com/Ferhatmedtahar) ([ferhatmedtahar.dev](https://ferhatmedtahar.dev)), on top of the idea and first page from Describble (see above). Questions or ideas: open an issue at [github.com/Ferhatmedtahar/landscrawl](https://github.com/Ferhatmedtahar/landscrawl/issues).
 
 ## Contributing
 

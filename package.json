@@ -5,6 +5,27 @@
   "type": "module",
   "description": "Type a sentence, get a hand-drawn landscape. 100% client-side.",
   "license": "MIT",
+  "author": {
+    "name": "Ferhat Mohamed Tahar",
+    "email": "ferhat@ferhatmedtahar.dev",
+    "url": "https://github.com/Ferhatmedtahar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ferhatmedtahar/landscrawl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ferhatmedtahar/landscrawl/issues"
+  },
+  "keywords": [
+    "landscape",
+    "svg",
+    "generative-art",
+    "text-to-image",
+    "client-side",
+    "no-ai",
+    "procedural"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

@@ -5,6 +5,7 @@ export interface Strings {
   headline: string
   lede: string
   examplesTitle: string
+  needs: string
   how: [string, string, string]
   license: string
   tagline: string
@@ -36,6 +37,7 @@ export const EN: LangMeta = {
     headline: 'Describe a place. Watch it get drawn.',
     lede: 'Hand-drawn landscapes from a sentence. No AI, no account, nothing to install.',
     examplesTitle: 'Start from one of these',
+    needs: 'A landscape needs a time, a sky, weather, terrain, plants… even a moon and stars.',
     how: ['No AI, just words and a pencil.', 'Everything runs in this page.', 'Nothing is sent anywhere.'],
     license: 'Code MIT, drawings CC0.',
     tagline: 'Describe a landscape and watch it get drawn.',
