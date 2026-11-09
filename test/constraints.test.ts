@@ -26,7 +26,7 @@ describe('project constraints', () => {
   it('the page cannot contact anything: a strict CSP is in place', () => {
     const html = read('index.html'), config = read('vite.config.ts')
     expect(html).toContain('<!--csp-->'); expect(config).toContain("connect-src 'none'"); expect(config).toContain("default-src 'none'")
-    expect(html).not.toMatch(/<script[^>]+src="https?:|<link[^>]+href="https?:|<img[^>]+src="https?:/)
+    expect(html).not.toMatch(/<script[^>]+src="https?:|<link(?![^>]*rel="canonical")[^>]+href="https?:|<img[^>]+src="https?:/)
   })
   it('no analytics, trackers or AI/model calls are referenced anywhere', () => {
     for (const f of [...src, 'index.html', 'package.json']) expect(read(f), f).not.toMatch(/google-analytics|gtag|plausible|segment\.|mixpanel|openai|anthropic|api\.[a-z]+\.com/i)

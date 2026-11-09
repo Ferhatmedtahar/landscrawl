@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { removeChip } from '../src/parser/chips'
 import { parse, parseDetailed } from '../src/parser/parse'
@@ -139,4 +140,18 @@ describe('example pills', () => {
     expect(long).not.toMatch(/[,\s]…$/)
     for (const e of EXAMPLES) expect(shorten(e).length).toBeLessThanOrEqual(PILL_CHARS)
   })
+})
+
+describe('index.html static text', () => {
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+  const S = langMeta('en').strings
+  it('has the English copy baked in so crawlers and no-JS visitors see it', () => {
+    for (const t of [S.kicker, S.headline, S.lede, S.examplesTitle, S.privacy, S.license, ...S.how]) expect(html, t).toContain(t)
+  })
+  it('has the basic SEO tags', () => {
+    expect(html).toMatch(/<title>[^<]{10,60}<\/title>/)
+    expect(html).toMatch(/<meta name="description" content="[^"]{70,160}"/)
+    for (const t of ['rel="canonical"', 'property="og:image"', 'name="twitter:card"', 'application/ld+json']) expect(html).toContain(t)
+  })
+  it('links to the author site in the footer', () => expect(html).toContain('href="https://ferhatmedtahar.dev"'))
 })

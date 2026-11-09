@@ -22,6 +22,7 @@ export interface Strings {
   unknown: string
   unused: string
   privacy: string
+  madeBy: string
   removeChip: (label: string) => string
 }
 
@@ -54,6 +55,7 @@ export const EN: LangMeta = {
     unknown: "I didn't know:",
     unused: 'Not used:',
     privacy: 'No tracking.',
+    madeBy: 'Made by',
     removeChip: (label) => `Remove ${label}`,
   },
 }

@@ -3,9 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Landscrawl</title>
-  <meta name="description" content="Type a sentence and a hand-drawn landscape is drawn live in your browser. No accounts, no servers, no AI.">
+  <title>Landscrawl: draw a landscape from a sentence</title>
+  <meta name="description" content="Type a sentence and watch a hand-drawn landscape get drawn live in your browser. Free, no AI, no sign-up. Download as PNG or SVG.">
   <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0c130e">
+  <meta name="author" content="Ferhat Mohamed Tahar">
+  <link rel="canonical" href="https://landscrawl.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Landscrawl">
+  <meta property="og:title" content="Landscrawl: draw a landscape from a sentence">
+  <meta property="og:description" content="Type a sentence, watch a hand-drawn landscape get drawn live. No AI, no account, runs in your browser.">
+  <meta property="og:url" content="https://landscrawl.vercel.app/">
+  <meta property="og:image" content="https://landscrawl.vercel.app/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A hand-drawn sunset over snowy mountains with a small cabin and pine trees">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Landscrawl: draw a landscape from a sentence">
+  <meta name="twitter:description" content="Type a sentence, watch a hand-drawn landscape get drawn live. No AI, no account.">
+  <meta name="twitter:image" content="https://landscrawl.vercel.app/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Landscrawl","url":"https://landscrawl.vercel.app/","description":"Type a sentence and watch a hand-drawn landscape get drawn live in your browser. Free, no AI, no sign-up. Download as PNG or SVG.","applicationCategory":"DesignApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"license":"https://opensource.org/license/mit","author":{"@type":"Person","name":"Ferhat Mohamed Tahar","url":"https://ferhatmedtahar.dev"}}</script>
   <!--csp-->
   <link rel="stylesheet" href="/src/ui/style.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23e9efdb'/%3E%3Ccircle cx='22' cy='11' r='3' fill='%23e8c15a'/%3E%3Cpath d='M3 24 L12 12 L17 19 L21 15 L29 24 Q16 29 3 24Z' fill='%230f1a10'/%3E%3C/svg%3E">
@@ -24,8 +41,8 @@
   <main>
     <div id="hero">
       <div class="intro">
-        <h1><span class="kicker" id="kicker"></span> <span id="headline"></span></h1>
-        <p class="lede" id="lede"></p>
+        <h1><span class="kicker" id="kicker">Free landscape maker · no AI, no sign-up</span> <span id="headline">Describe a place. Watch it get drawn.</span></h1>
+        <p class="lede" id="lede">Hand-drawn landscapes from a sentence. No AI, no account, nothing to install.</p>
       </div>
       <div class="drawing"><div id="stage"></div></div>
       <div class="composer">
@@ -56,15 +73,15 @@
     </div>
 
     <section aria-labelledby="examples-title">
-      <h2 id="examples-title"></h2>
+      <h2 id="examples-title">Start from one of these</h2>
       <ul id="examples"></ul>
     </section>
 
     <section aria-label="About">
-      <div class="how" id="how"></div>
+      <div class="how" id="how"><p>No AI, just words and a pencil.</p><p>Everything runs in this page.</p><p>Nothing is sent anywhere.</p></div>
     </section>
   </main>
-  <footer><p id="privacy"></p><p id="license"></p></footer>
+  <footer><p id="privacy">No tracking.</p><p id="license">Code MIT, drawings CC0.</p><p><span id="made-by">Made by</span> <a href="https://ferhatmedtahar.dev" rel="noopener">Ferhat Mohamed Tahar</a> · <a href="https://github.com/Ferhatmedtahar/landscrawl" rel="noopener">Source on GitHub</a></p></footer>
   <div id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
