@@ -39,7 +39,7 @@ Node 20 or newer (`.nvmrc` has 22). There are no runtime dependencies; Vite, Typ
 
 ## What it understands
 
-Time of day, sky, weather, kinds of land and water, plants, and a list of things you can put in the scene (a cabin, a boat, a lighthouse, a camel, a campfire and so on). A few habits make it forgiving:
+Time of day, sky, weather, kinds of land and water, plants, and a list of things you can put in the scene (a cabin, a boat, a lighthouse, a camel, a campfire, a hiker, a fisherman, a hot air balloon and so on), plus a rainbow and fireflies. A few habits make it forgiving:
 
 - Later words win: "day ... night" is night.
 - Negation works, even on something you said earlier: `no clouds`, `without snow or wind`.

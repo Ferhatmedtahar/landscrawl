@@ -12,7 +12,7 @@ export type Terrain = (typeof TERRAINS)[number]
 
 export const OBJECTS = [
   'cabin', 'house', 'village', 'boat', 'road', 'bridge', 'lighthouse', 'tent', 'campfire',
-  'windmill', 'birds', 'balloon', 'castle', 'casbah', 'mosque', 'camel',
+  'windmill', 'birds', 'balloon', 'person', 'hiker', 'fisherman', 'castle', 'casbah', 'mosque', 'camel',
   'igloo', 'pyramid', 'ruins', 'cactus', 'sled', 'penguins', 'whale',
 ] as const
 export type SceneObject = (typeof OBJECTS)[number]
@@ -86,6 +86,8 @@ export interface PathSpec {
   ink?: string
   /** Also fill with diagonal hatch lines (shadow sides). */
   hatch?: boolean
+  /** Alternative shapes for animation, one per boil variant (variant % length). `d` must equal frames[0]. */
+  frames?: string[]
 }
 export interface Layer {
   id: string

@@ -1,5 +1,8 @@
 import type { Resolved } from '../scene/model/resolve'
 
+/** Spoken names where the plain kind would sound wrong. */
+const NAMES: Partial<Record<string, [string, string]>> = { balloon: ['hot air balloon', 'hot air balloons'], person: ['person', 'people'], fisherman: ['fisherman', 'fishermen'] }
+
 const list = (items: string[]) => (items.length <= 1 ? items.join('') : items.slice(0, -1).join(', ') + ' and ' + items.at(-1))
 
 /** One plain sentence for screen readers (the SVG's aria-label). */
@@ -15,7 +18,10 @@ export function describeScene(r: Resolved): string {
   if (v.cactus > 0.05) parts.push('cacti')
   if (v.deadTrees > 0.05) parts.push('dead trees')
   if (v.loneTree) parts.push('a lone tree')
-  for (const o of r.objects) { const name = o.kind === 'balloon' ? 'hot air balloon' : o.kind; parts.push(o.count > 1 ? `${o.count} ${name}s` : `a ${name}`) }
+  for (const o of r.objects) {
+    const [one, many] = NAMES[o.kind] ?? [o.kind, `${o.kind}s`]
+    parts.push(o.count > 1 ? `${o.count} ${many}` : `a ${one}`)
+  }
   if (r.fireflies && r.time !== 'day') parts.push('fireflies')
   const weather: string[] = []
   const w = r.weather

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '../src/modules/parser/parse'
+import { parse, parseDetailed } from '../src/modules/parser/parse'
 import { editDistance, normalizeText, stem } from '../src/modules/lexicon/normalize'
 
 describe('normalize and stem', () => {
@@ -343,5 +343,12 @@ describe('rainbow, fireflies and hot air balloon', () => {
   it('a hot air balloon is an object, and "lightning bugs" is not a storm', () => {
     for (const w of ['hot air balloon', 'a balloon', 'two balloons']) expect(parse(w).objects, w).toContain('balloon')
     expect(parse('lightning bugs').weather.rain).toBe(0)
+  })
+})
+
+describe('number words', () => {
+  it.each([['four', 4], ['five', 5], ['six', 6], ['seven', 7], ['eight', 8], ['nine', 9]])('"%s boats" means %i', (w, n) => {
+    expect(parse(`${w} boats`).counts['objects.boat']).toBe(n)
+    expect(parseDetailed(`${w} boats`).state.unknownWords).toEqual([])
   })
 })

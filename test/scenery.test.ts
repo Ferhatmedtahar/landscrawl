@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { parse } from '../src/modules/parser/parse'
+import { drawLayer } from '../src/modules/render/draw'
 import { buildScene } from '../src/modules/scene/buildScene'
 import { HORIZON, inWater, waterGeometry } from '../src/modules/scene/layout/geometry'
 import { shoreProfile } from '../src/modules/scene/layers/ground'
@@ -144,6 +145,80 @@ describe('balloons and fireflies', () => {
   })
 })
 
+describe('flapping birds', () => {
+  const birds = (seed = 3, text = 'birds') => buildScene(parse(text), seed).find((l) => l.id === 'objects')!
+  const items = (layer: ReturnType<typeof birds>, v: number, seed = 3) => drawLayer(layer, { seed, variant: v, amp: 0, sketch: true })
+  it('a bird changes shape between the four boil frames, with the same structure', () => {
+    const layer = birds()
+    const first = items(layer, 0)
+    expect(new Set([0, 1, 2, 3].map((v) => items(layer, v)[0]!.d)).size).toBeGreaterThan(2)
+    for (const v of [1, 2, 3]) expect(items(layer, v).length).toBe(first.length)
+  })
+  it('birds in a flock are out of step: at the same frame their wings are at different heights', () => {
+    const layer = birds(3, 'six birds')
+    expect(layer.paths.length).toBe(6)
+    // M tipX tipY Q ... bodyX bodyY: wing height = body y - tip y
+    const height = (d: string) => { const n = d.match(/-?[\d.]+/g)!.map(Number); return n[5]! - n[1]! }
+    expect(new Set(layer.paths.map((p) => Math.round(height(p.frames![0]!)))).size).toBeGreaterThan(1)
+    for (const p of layer.paths) expect(p.d).toBe(p.frames![0])
+  })
+  it('the flap is deterministic', () => {
+    expect(items(birds(), 2)).toEqual(items(birds(), 2))
+  })
+  it('every pose is a valid path the jitter can handle', () => {
+    const layer = birds()
+    for (const v of [0, 1, 2, 3]) for (const amp of [0, 2.6]) for (const it of drawLayer(layer, { seed: 3, variant: v, amp, sketch: true })) expect(it.d).toMatch(/^M-?[\d.]+ -?[\d.]+[A-Za-z\d .\-]*$/)
+  })
+})
+
+describe('people', () => {
+  const PEOPLE = ['person', 'hiker', 'fisherman'] as const
+  it('the parser knows them, with counts', () => {
+    expect(parse('a hiker').objects).toContain('hiker')
+    expect(parse('a fisherman by a lake').objects).toContain('fisherman')
+    expect(parse('a lone traveller').objects).toContain('person')
+    expect(resolveScene(parse('three hikers'), 1).objects.find((o) => o.kind === 'hiker')?.count).toBe(3)
+    expect(resolveScene(parse('two people'), 1).objects.find((o) => o.kind === 'person')?.count).toBe(2)
+  })
+  it('people stand on dry land, never in water, never on the road', () => {
+    let n = 0
+    for (const seed of SEEDS) {
+      const { water, ground, s } = place('lake, river, a road, hills, two people, a hiker', seed)
+      for (const o of s.objects.filter((o) => (PEOPLE as readonly string[]).includes(o.kind))) {
+        n++; expect(ground.land(o.x, o.y), `@${seed}`).toBe(true); expect(inWater(water, o.x, o.y)).toBe(false)
+        for (const p of s.road ?? []) if (Math.abs(p.y - o.y) < 24) expect(Math.abs(p.x - o.x)).toBeGreaterThan(p.hw)
+      }
+    }
+    expect(n).toBeGreaterThan(80)
+  })
+  it('a fisherman stands at the water and faces it; with no water he is left out', () => {
+    let n = 0
+    for (const seed of SEEDS) {
+      const { water, ground, s } = place('lake, a fisherman', seed)
+      for (const o of s.objects.filter((o) => o.kind === 'fisherman')) {
+        n++; expect(ground.land(o.x, o.y)).toBe(true)
+        expect(inWater(water, o.x + 110 * (o.dir ?? 1), o.y) || inWater(water, o.x + 60 * (o.dir ?? 1), o.y), `@${seed} faces water`).toBe(true)
+      }
+    }
+    expect(n).toBeGreaterThan(SEEDS.length * 0.6)
+    expect(place('dunes, a fisherman', 1).s.skipped).toContain('fisherman')
+  })
+  it('several hikers do not stack', () => {
+    for (const seed of SEEDS.slice(0, 15)) {
+      const hs = place('hills, three hikers', seed).s.objects.filter((o) => o.kind === 'hiker')
+      expect(hs.length).toBeGreaterThanOrEqual(2)
+      for (let i = 0; i < hs.length; i++) for (let j = i + 1; j < hs.length; j++) expect(Math.hypot(hs[i]!.x - hs[j]!.x, hs[i]!.y - hs[j]!.y)).toBeGreaterThan(20)
+    }
+  })
+  it('they are described in plain words', async () => {
+    const { describeScene } = await import('../src/modules/ui/describe')
+    const d = (t: string) => describeScene(resolveScene(parse(t), 3))
+    expect(d('two people, hills')).toContain('2 people')
+    expect(d('a hiker, hills')).toContain('a hiker')
+    expect(d('three fishermen, lake')).toContain('3 fishermen')
+  })
+})
+
 describe('scenery layers and night glow', () => {
   const ids = (t: string, seed = 5) => buildScene(parse(t), seed).map((l) => l.id)
   it('vegetation and objects layers appear when there is something to draw', () => {
@@ -167,7 +242,7 @@ describe('scenery layers and night glow', () => {
     expect(l.indexOf('road')).toBeLessThan(l.indexOf('vegetation'))
   })
   it('every object the parser knows can be drawn without error', () => {
-    const all = 'cabin house village boat road bridge lighthouse tent campfire windmill birds balloon castle casbah mosque camel igloo pyramid ruins sled penguins whale'
+    const all = 'cabin house village boat road bridge lighthouse tent campfire windmill birds balloon person hiker fisherman castle casbah mosque camel igloo pyramid ruins sled penguins whale'
     for (const kind of all.split(' ')) for (const seed of [1, 2, 3]) {
       expect(() => buildScene(parse(`sea, lake, river, ${kind}`), seed), kind).not.toThrow()
       expect(() => buildScene(parse(`night, dunes, ${kind}`), seed), kind).not.toThrow()

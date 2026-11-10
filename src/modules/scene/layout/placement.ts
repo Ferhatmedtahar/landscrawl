@@ -6,7 +6,7 @@ import { VIEW, type SceneObject } from '../model/types'
 
 export type TreeKind = 'pine' | 'leaf' | 'palm' | 'dead' | 'cactus'
 export interface PlacedTree { kind: TreeKind; x: number; y: number; s: number; seed: number; lone: boolean }
-export interface PlacedObject { kind: SceneObject; x: number; y: number; s: number; seed: number; x2?: number; onIslet?: boolean }
+export interface PlacedObject { kind: SceneObject; x: number; y: number; s: number; seed: number; x2?: number; onIslet?: boolean; /** Which way a figure faces (fishermen face the water). */ dir?: 1 | -1 }
 export interface Box { x0: number; y0: number; x1: number; y1: number }
 
 export interface Firefly { x: number; y: number; r: number }
@@ -25,10 +25,10 @@ export interface Scenery {
 /** Perspective: things lower on the screen are nearer and larger. */
 export const scaleAt = (y: number) => Math.min(1.3, Math.max(0.38, 0.4 + ((y - 610) / 270) * 0.9))
 
-const KIND_SIZE: Partial<Record<SceneObject, number>> = { cabin: 1.35, house: 1.25, village: 1.5, tent: 1.35, campfire: 1.4, balloon: 1.1, pyramid: 2.4, lighthouse: 1.5, windmill: 1.5, mosque: 1.3, casbah: 1.4, camel: 1.5, penguins: 1.6, boat: 1.2, whale: 1.4, castle: 1.3, igloo: 1.7, ruins: 1.3, sled: 1.5 }
+const KIND_SIZE: Partial<Record<SceneObject, number>> = { cabin: 1.35, house: 1.25, village: 1.5, tent: 1.35, campfire: 1.4, balloon: 1.1, person: 1.8, hiker: 1.8, fisherman: 1.8, pyramid: 2.4, lighthouse: 1.5, windmill: 1.5, mosque: 1.3, casbah: 1.4, camel: 1.5, penguins: 1.6, boat: 1.2, whale: 1.4, castle: 1.3, igloo: 1.7, ruins: 1.3, sled: 1.5 }
 /** Half-width of each thing at scale 1, for overlap checks. */
-const HALF_W: Partial<Record<SceneObject, number>> = { cabin: 55, house: 62, village: 120, boat: 50, tent: 48, campfire: 22, windmill: 45, castle: 90, casbah: 100, mosque: 70, camel: 50, igloo: 55, pyramid: 100, ruins: 80, sled: 40, penguins: 50, lighthouse: 26, whale: 90 }
-const HEIGHT: Partial<Record<SceneObject, number>> = { cabin: 80, house: 95, village: 100, boat: 90, tent: 60, campfire: 40, windmill: 130, castle: 140, casbah: 90, mosque: 140, camel: 80, igloo: 60, pyramid: 100, ruins: 90, sled: 40, penguins: 50, lighthouse: 150, whale: 60 }
+const HALF_W: Partial<Record<SceneObject, number>> = { cabin: 55, house: 62, village: 120, boat: 50, tent: 48, campfire: 22, person: 14, hiker: 20, fisherman: 34, windmill: 45, castle: 90, casbah: 100, mosque: 70, camel: 50, igloo: 55, pyramid: 100, ruins: 80, sled: 40, penguins: 50, lighthouse: 26, whale: 90 }
+const HEIGHT: Partial<Record<SceneObject, number>> = { cabin: 80, house: 95, village: 100, boat: 90, tent: 60, campfire: 40, person: 58, hiker: 66, fisherman: 70, windmill: 130, castle: 140, casbah: 90, mosque: 140, camel: 80, igloo: 60, pyramid: 100, ruins: 90, sled: 40, penguins: 50, lighthouse: 150, whale: 60 }
 
 export interface Ground {
   /** True when (x, y) is dry land you could stand a house on. */
@@ -158,14 +158,23 @@ export function placeScenery(r: Resolved, seed: number, water: WaterGeo, ground:
     const isWater = WATER_OBJECTS.has(o.kind)
     if (isWater && !(water.sea || water.lake || water.river)) { out.skipped.push(o.kind); continue }
     if (o.kind === 'whale' && !water.sea) { out.skipped.push('whale'); continue }
+    const angler = o.kind === 'fisherman'
+    if (angler && !(water.sea || water.lake || water.river)) { out.skipped.push('fisherman'); continue }
+    // which way the water is, seen from a spot on the bank (0 = not by the water)
+    const waterSide = (x: number, y: number): 0 | 1 | -1 => {
+      for (const dir of [1, -1] as const) if (inWater(water, x + dir * 60, y) || inWater(water, x + dir * 110, y)) return dir
+      return water.sea && y < ground.shore(x) + 70 ? (Math.floor(x) % 2 ? 1 : -1) : 0
+    }
     let placed = 0
     for (let i = 0; i < o.count; i++) {
       const spec: SpotSpec = isWater
         ? { kind: o.kind, yMin: water.sea ? water.sea.top + 40 : 640, yMax: water.sea ? 780 : 800, ok: waterOk }
-        : { kind: o.kind, yMin: o.kind === 'pyramid' || o.kind === 'castle' ? 628 : 640, yMax: water.sea ? 890 : o.kind === 'pyramid' || o.kind === 'castle' ? 700 : 800, ok: (x, y, hw) => landOk(x, y, hw) && !onRoad(x, y, hw) }
+        : { kind: o.kind, yMin: o.kind === 'pyramid' || o.kind === 'castle' ? 628 : 640, yMax: water.sea ? 890 : o.kind === 'pyramid' || o.kind === 'castle' ? 700 : 800, ok: (x, y, hw) => landOk(x, y, hw) && !onRoad(x, y, hw) && (!angler || waterSide(x, y) !== 0) }
       const spot = findSpot(rng, spec, taken, o.scale)
       if (!spot) continue
       const placedObj: PlacedObject = { kind: o.kind, ...spot, seed: Math.floor(rng() * 1e9) }
+      if (angler) placedObj.dir = waterSide(spot.x, spot.y) || 1
+      else if (o.kind === 'person' || o.kind === 'hiker') placedObj.dir = rng() < 0.5 ? 1 : -1
       out.objects.push(placedObj)
       taken.push(footprint(o.kind, spot.x, spot.y, spot.s))
       placed++

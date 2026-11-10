@@ -85,7 +85,7 @@ Output: the `SceneState` from the spec, plus `scale`, `counts`, `optional` (hint
 
 ## 3. Render
 
-`drawLayer(layer, {seed, variant, amp, sketch})` turns a layer into `DrawItem`s. Paths are parsed (M L H V C Q A Z, absolute and relative) and flattened into short straight pieces, then each point moves by coherent 2D value noise plus a little shake. Opaque fills get two outline strokes with different jitter; translucent shadow facets get a hatch pattern. The item list has the same structure for every variant, which is what lets the stage swap only the `d` strings when it boils.
+`drawLayer(layer, {seed, variant, amp, sketch})` turns a layer into `DrawItem`s. Paths are parsed (M L H V C Q A Z, absolute and relative) and flattened into short straight pieces, then each point moves by coherent 2D value noise plus a little shake. Opaque fills get two outline strokes with different jitter; translucent shadow facets get a hatch pattern. A path may carry `frames` (one shape per boil variant): birds use it to flap, each starting at a different point of the beat. The item list has the same structure for every variant, which is what lets the stage swap only the `d` strings when it boils.
 
 `renderSvg` is the pure string renderer (used for tests and export). `Stage` (in `stage/`) is the live DOM version: four variants cycled every 140 ms, jitter 2.6 units while typing and 1.1 once settled (600 ms), new layers drawn in with `stroke-dashoffset` (400 ms), removed layers faded, parallax on drag or tilt, reduced motion disables all of it.
 

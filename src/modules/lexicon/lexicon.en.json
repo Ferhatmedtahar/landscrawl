@@ -214,6 +214,42 @@
     "several"
    ],
    "quantity": 3
+  },
+  {
+   "keys": [
+    "four"
+   ],
+   "quantity": 4
+  },
+  {
+   "keys": [
+    "five"
+   ],
+   "quantity": 5
+  },
+  {
+   "keys": [
+    "six"
+   ],
+   "quantity": 6
+  },
+  {
+   "keys": [
+    "seven"
+   ],
+   "quantity": 7
+  },
+  {
+   "keys": [
+    "eight"
+   ],
+   "quantity": 8
+  },
+  {
+   "keys": [
+    "nine"
+   ],
+   "quantity": 9
   }
  ],
  "colors": {
@@ -2619,6 +2655,53 @@
    "set": {
     "objects+": [
      "balloon"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "person",
+    "people",
+    "man",
+    "woman",
+    "human",
+    "figure",
+    "walker",
+    "traveler",
+    "traveller",
+    "wanderer",
+    "villager"
+   ],
+   "set": {
+    "objects+": [
+     "person"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "hiker",
+    "trekker",
+    "backpacker",
+    "climber",
+    "mountaineer"
+   ],
+   "set": {
+    "objects+": [
+     "hiker"
+    ]
+   }
+  },
+  {
+   "keys": [
+    "fisherman",
+    "fishermen",
+    "angler",
+    "fisher"
+   ],
+   "set": {
+    "objects+": [
+     "fisherman"
     ]
    }
   }

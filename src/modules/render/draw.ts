@@ -29,10 +29,14 @@ export interface DrawOptions {
 
 export const PLAIN: DrawOptions = { seed: 0, variant: 0, amp: 0, sketch: false }
 
-const cache = new WeakMap<PathSpec, Poly[]>()
-const polysOf = (p: PathSpec) => {
-  let v = cache.get(p)
-  if (!v) { v = flatten(p.d); cache.set(p, v) }
+const cache = new WeakMap<PathSpec, Poly[][]>()
+/** The flattened shape of a path; animated paths (`frames`) have one shape per boil variant. */
+const polysOf = (p: PathSpec, variant = 0) => {
+  const frame = p.frames ? variant % p.frames.length : 0
+  let all = cache.get(p)
+  if (!all) { all = []; cache.set(p, all) }
+  let v = all[frame]
+  if (!v) { v = flatten(p.frames ? (p.frames[frame] as string) : p.d); all[frame] = v }
   return v
 }
 
@@ -57,13 +61,13 @@ export function drawLayer(layer: Layer, o: DrawOptions): DrawItem[] {
     const base = subSeed(o.seed + o.variant * 7919, `${layer.id}:${i}`)
     const ink = o.sketch ? inkColor(p) : undefined
     const wobble = o.amp > 0 && !p.still && (!isGradient(p.fill) || ink !== undefined || p.stroke !== undefined)
-    const d = wobble ? polysToD(jitterPolys(polysOf(p), base, o.amp)) : p.d
+    const d = wobble ? polysToD(jitterPolys(polysOf(p, o.variant), base, o.amp)) : p.frames ? (p.frames[o.variant % p.frames.length] as string) : p.d
     const filled = p.fill !== undefined && p.fill !== 'none'
     items.push({ kind: filled ? 'fill' : 'stroke', d, fill: p.fill ?? 'none', stroke: p.stroke, strokeWidth: p.strokeWidth, opacity: p.opacity, src: i })
     if (o.sketch && p.hatch) items.push({ kind: 'hatch', d, fill: 'url(#hatch)', opacity: 0.55, src: i })
     if (ink) {
       for (let k = 0; k < 2; k++) {
-        const dd = o.amp > 0 ? polysToD(jitterPolys(polysOf(p), subSeed(base, `ink${k}`), o.amp * (k === 0 ? 0.9 : 1.3))) : p.d
+        const dd = o.amp > 0 ? polysToD(jitterPolys(polysOf(p, o.variant), subSeed(base, `ink${k}`), o.amp * (k === 0 ? 0.9 : 1.3))) : p.frames ? (p.frames[o.variant % p.frames.length] as string) : p.d
         items.push({ kind: 'ink', d: dd, fill: 'none', stroke: ink, strokeWidth: k === 0 ? 1.7 : 1.1, opacity: k === 0 ? 0.62 : 0.4, src: i })
       }
     }

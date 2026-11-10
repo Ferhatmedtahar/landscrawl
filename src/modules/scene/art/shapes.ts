@@ -144,6 +144,50 @@ function camel(c: Ctx) {
   c.blob([[48, -66], [62, -64], [62, -56], [48, -56]], col)
 }
 
+/** Wing height per boil frame: glide, wings up, glide, wings down. */
+const FLAP = [0.35, 1, 0.35, -0.8] as const
+
+/**
+ * The four shapes of a flapping bird (one per boil frame), each a pair of curves meeting at the body.
+ * `phase` starts the bird at a different point of the beat, so a flock is never in step.
+ */
+export function birdFrames(x: number, y: number, w: number, phase: number): string[] {
+  return [0, 1, 2, 3].map((i) => {
+    const t = FLAP[(i + phase) % 4] as number
+    const tip = y - t * w * 0.7, ctrl = y - w * 0.55 - t * w * 0.15
+    return `M${f1(x - w)} ${f1(tip)}Q${f1(x - w / 2)} ${f1(ctrl)} ${f1(x)} ${f1(y)}Q${f1(x + w / 2)} ${f1(ctrl)} ${f1(x + w)} ${f1(tip)}`
+  })
+}
+
+const COATS = ['#c8553d', '#3f7fbf', '#d9a441', '#5f9a54', '#8a5bb8', '#c9c4b4'] as const
+const SKINS = ['#e8c4a0', '#c98f64', '#8a5a3c'] as const
+
+/** A small standing person; `dir` is the way they face (1 = right). Hikers carry a pack and stick, fishermen a rod. */
+function figure(c: Ctx, rng: () => number, kind: 'person' | 'hiker' | 'fisherman', dir: 1 | -1) {
+  const coat = COATS[Math.floor(rng() * COATS.length)] as string
+  const skin = SKINS[Math.floor(rng() * SKINS.length)] as string
+  const pants = kind === 'fisherman' ? '#4a5a3a' : '#3a4256'
+  c.line([[-3, -24], [-5, 0]], pants, 4.4)
+  c.line([[3, -24], [5, 0]], pants, 4.4)
+  if (kind === 'hiker') c.poly([[-dir * 6, -47], [-dir * 15, -44], [-dir * 15, -25], [-dir * 6, -27]], '#8a5a32')
+  c.poly([[-7, -46], [7, -46], [6, -23], [-6, -23]], coat)
+  if (kind === 'hiker') {
+    c.line([[dir * 6, -43], [dir * 11, -32]], coat, 3.2)
+    c.line([[dir * 11, -66], [dir * 13, 0]], '#6b4e32', 2.2)
+  } else if (kind === 'fisherman') {
+    c.line([[dir * 6, -43], [dir * 11, -34]], coat, 3.2)
+    c.line([[dir * 9, -35], [dir * 44, -72]], '#6b4e32', 2)
+    c.line([[dir * 44, -72], [dir * 48, -30]], '#d8dde6', 1, { opacity: 0.75 })
+  } else {
+    c.line([[-6, -44], [-9, -28]], coat, 3.2)
+    c.line([[6, -44], [9, -28]], coat, 3.2)
+  }
+  c.dot(0, -53, 5.6, skin)
+  if (kind === 'hiker') { c.poly([[-10, -56], [10, -56], [5, -64], [-5, -64]], '#7a5a32'); c.line([[-11, -56], [11, -56]], '#5a3f22', 2) }
+  else if (kind === 'fisherman') c.poly([[-11, -57], [11, -57], [6, -63], [-6, -63]], '#e2c070')
+  else c.poly([[-5.6, -54], [5.6, -54], [4.5, -60], [-4.5, -60]], ['#3a2a1e', '#d9b060', '#7a3a2a', '#2a2a30'][Math.floor(rng() * 4)] as string, { outline: false })
+}
+
 function drawObject(o: PlacedObject, r: Resolved, pal: Pal, glows: Glow[], beams: Drawn['beams'], out: PathSpec[]): void {
   const rng = mulberry32(o.seed)
   const haze = Math.max(0, 1 - (o.y - 610) / 270) * 0.28
@@ -192,11 +236,12 @@ function drawObject(o: PlacedObject, r: Resolved, pal: Pal, glows: Glow[], beams
       break
     }
     case 'birds': {
-      let d = ''
-      for (let i = 0; i < 1; i++) { const [x, y] = c.p([0, 0]); const w = 12 * c.s; d += `M${f1(x - w)} ${f1(y)}q${f1(w / 2)} ${f1(-w * 0.8)} ${f1(w)} 0q${f1(w / 2)} ${f1(-w * 0.8)} ${f1(w)} 0` }
-      out.push({ d, stroke: dark > 0.5 ? '#aab4d0' : '#2a2a38', strokeWidth: 2.2, still: false })
+      const [x, y] = c.p([0, 0])
+      const frames = birdFrames(x, y, 12 * c.s, Math.floor(rng() * 4))
+      out.push({ d: frames[0] as string, frames, stroke: dark > 0.5 ? '#aab4d0' : '#2a2a38', strokeWidth: 2.2, still: false })
       break
     }
+    case 'person': case 'hiker': case 'fisherman': figure(c, rng, o.kind, o.dir ?? 1); break
     case 'balloon': {
       const tint = (h: string) => pal.lit(h, 0.06) // up in the sky there is no ground haze
       const b = new Ctx(o.x, o.y, o.s, out, tint)
